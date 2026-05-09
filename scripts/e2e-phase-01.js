@@ -29,7 +29,7 @@ function assert(condition, message) {
 
 async function run() {
   const browser = await chromium.launch({
-    executablePath: '/home/claude/.cache/ms-playwright/chromium-1217/chrome-linux/chrome',
+    executablePath: process.env.PLAYWRIGHT_CHROMIUM_PATH ?? '/home/claude/.cache/ms-playwright/chromium-1217/chrome-linux/chrome',
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
     headless: true,
   });

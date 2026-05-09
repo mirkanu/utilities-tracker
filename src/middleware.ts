@@ -26,6 +26,11 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Allow health check endpoint — called by Docker health check, not a browser
+  if (pathname.startsWith("/api/health")) {
+    return NextResponse.next();
+  }
+
   // In middleware (edge runtime), use a CookieStore adapter over request.cookies
   const session = await getIronSession<SessionData>(makeCookieStore(request), sessionOptions);
 

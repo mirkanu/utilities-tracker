@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-05-09)
 ## Current Position
 
 Phase: 1 of 4 (Foundation)
-Plan: 0 of ? in current phase
-Status: Ready to plan
-Last activity: 2026-05-09 — Roadmap created (4 phases, 20 requirements mapped)
+Plan: 0 of 6 in current phase
+Status: Ready to execute
+Last activity: 2026-05-09 — Phase 1 planned (6 plans, 5 waves)
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -54,8 +54,8 @@ None yet.
 
 ### Blockers/Concerns
 
-- Brute-force protection approach not yet decided: (1) Cloudflare Access IP restriction (recommended, zero app code) or (2) in-app rate limiting in PostgreSQL. Decide before Phase 1 starts.
-- UTILITIES_SESSION_SECRET must be generated (`openssl rand -base64 32`) and added to /home/services/.env.production before first deploy.
+- Brute-force protection: Using Cloudflare Access IP restriction (no app code needed) — resolved in planning.
+- UTILITIES_SESSION_SECRET: Plan 01-05 generates this automatically via `openssl rand -base64 32` during deploy task.
 
 ## Deferred Items
 

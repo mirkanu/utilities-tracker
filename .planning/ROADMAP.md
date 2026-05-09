@@ -29,8 +29,16 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. The app is reachable at a public HTTPS URL via Cloudflare Tunnel
   4. The app renders correctly on a phone (bottom nav bar visible, tap targets usable)
   5. User can tap between Oil and Electricity sections in the bottom navigation bar
-**Plans**: TBD
+**Plans**: 6 plans
 **UI hint**: yes
+
+Plans:
+- [ ] 01-01-PLAN.md — Next.js 15 scaffold and shadcn/ui bootstrap
+- [ ] 01-02-PLAN.md — Drizzle ORM database layer (schema, migrations, postgres.js client)
+- [ ] 01-03-PLAN.md — iron-session auth (middleware, login page, server actions)
+- [ ] 01-04-PLAN.md — UI shell (root layout, bottom nav, route placeholders, loading skeletons, /api/health)
+- [ ] 01-05-PLAN.md — Docker deploy + Cloudflare Tunnel + secrets + backup wiring
+- [ ] 01-06-PLAN.md — Playwright E2E verification of all Phase 1 success criteria
 
 ### Phase 2: Oil Domain
 **Goal**: User can log and visualise oil consumption and know when the tank will run out
@@ -75,7 +83,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/? | Not started | - |
+| 1. Foundation | 0/6 | Planned ◆ | - |
 | 2. Oil Domain | 0/? | Not started | - |
 | 3. Electricity Domain | 0/? | Not started | - |
 | 4. Dashboard & Polish | 0/? | Not started | - |

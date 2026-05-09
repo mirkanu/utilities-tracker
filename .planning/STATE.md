@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "01-03-PLAN.md complete; ready for 01-04-PLAN.md"
-last_updated: "2026-05-09T17:05:22Z"
-last_activity: 2026-05-09 -- Completed 01-03 (iron-session auth + login page UI)
+stopped_at: "01-04-PLAN.md complete; ready for 01-05-PLAN.md"
+last_updated: "2026-05-09T17:25:00Z"
+last_activity: 2026-05-09 -- Completed 01-04 (app shell: BottomNav, loading skeletons, /api/health)
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 6
-  completed_plans: 2
-  percent: 8
+  completed_plans: 3
+  percent: 11
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-05-09)
 ## Current Position
 
 Phase: 01 (foundation) — EXECUTING
-Plan: 4 of 6
+Plan: 5 of 6
 Status: Executing Phase 01
-Last activity: 2026-05-09 -- Completed 01-03 (iron-session auth + login page UI)
+Last activity: 2026-05-09 -- Completed 01-04 (app shell: BottomNav, loading skeletons, /api/health)
 
-Progress: [██░░░░░░░░] 8%
+Progress: [███░░░░░░░] 11%
 
 ## Performance Metrics
 
@@ -69,6 +69,8 @@ Recent decisions affecting current work:
 - Phase 2: Require at least 2 readings since last purchase before showing any depletion prediction
 - Plan 01-03: CookieStore adapter wraps request.cookies in middleware (iron-session v8 type interface requires set() but middleware is read-only)
 - Plan 01-03: login() server action uses (prevState, formData) signature for useActionState (React 19) compatibility
+- Plan 01-04: BottomNav is a separate Client Component so usePathname hook is isolated from Server Component layout
+- Plan 01-04: /api/health added to middleware exclusion list to allow Docker health checker without auth
 
 ### Pending Todos
 

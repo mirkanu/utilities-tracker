@@ -1,5 +1,9 @@
 import type { SessionOptions } from "iron-session";
 
+if (!process.env.UTILITIES_SESSION_SECRET) {
+  throw new Error("UTILITIES_SESSION_SECRET is required but not set");
+}
+
 export interface SessionData {
   isLoggedIn: boolean;
 }
@@ -9,7 +13,7 @@ export const defaultSession: SessionData = {
 };
 
 export const sessionOptions: SessionOptions = {
-  password: process.env.UTILITIES_SESSION_SECRET!, // min 32 chars; generated with openssl rand -base64 32
+  password: process.env.UTILITIES_SESSION_SECRET, // min 32 chars; generated with openssl rand -base64 32
   cookieName: "utilities_session",
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",

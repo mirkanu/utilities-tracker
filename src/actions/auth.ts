@@ -1,29 +1,38 @@
 "use server";
 
+import { timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { getIronSession } from "iron-session";
+import { sessionOptions, type SessionData } from "@/lib/session";
 
-const COOKIE_NAME = "utilities_auth";
-const COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
+function passwordsMatch(supplied: string, expected: string): boolean {
+  // Pad both to the same max length to prevent length-based timing leakage
+  const maxLen = Math.max(supplied.length, expected.length);
+  const suppliedBuf = Buffer.from(supplied.padEnd(maxLen));
+  const expectedBuf = Buffer.from(expected.padEnd(maxLen));
+  // Also compare raw lengths — timingSafeEqual only checks byte equality
+  return (
+    supplied.length === expected.length &&
+    timingSafeEqual(suppliedBuf, expectedBuf)
+  );
+}
 
 export async function login(
   _prevState: { error: string; ok?: boolean } | null,
   formData: FormData
 ): Promise<{ error: string; ok?: boolean }> {
-  const password = formData.get("password") as string;
+  const supplied = (formData.get("password") as string) ?? "";
+  const expected = process.env.UTILITIES_PASSWORD ?? "";
 
-  if (!password || password !== process.env.UTILITIES_PASSWORD) {
+  if (!supplied || !passwordsMatch(supplied, expected)) {
     return { error: "Incorrect password" };
   }
 
   const cookieStore = await cookies();
-  cookieStore.set(COOKIE_NAME, "1", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: COOKIE_MAX_AGE,
-    path: "/",
-  });
+  const session = await getIronSession<SessionData>(cookieStore, sessionOptions);
+  session.isLoggedIn = true;
+  await session.save();
 
   // Return success — client navigates to /oil via useRouter to avoid
   // Next.js 15 bug where cookies().set() + redirect() clears the cookie
@@ -32,6 +41,7 @@ export async function login(
 
 export async function logout(): Promise<void> {
   const cookieStore = await cookies();
-  cookieStore.delete(COOKIE_NAME);
+  const session = await getIronSession<SessionData>(cookieStore, sessionOptions);
+  session.destroy();
   redirect("/login");
 }

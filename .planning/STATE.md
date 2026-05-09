@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Roadmap created; ready to run /gsd-plan-phase for Phase 1
-last_updated: "2026-05-09T16:22:30.916Z"
-last_activity: 2026-05-09 -- Phase 01 execution started
+stopped_at: "01-01-PLAN.md complete; ready for 01-02-PLAN.md"
+last_updated: "2026-05-09T16:43:33Z"
+last_activity: 2026-05-09 -- Completed 01-01 (Next.js scaffold + shadcn/ui)
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 6
-  completed_plans: 0
-  percent: 0
+  completed_plans: 1
+  percent: 4
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-05-09)
 ## Current Position
 
 Phase: 01 (foundation) — EXECUTING
-Plan: 1 of 6
+Plan: 2 of 6
 Status: Executing Phase 01
-Last activity: 2026-05-09 -- Phase 01 execution started
+Last activity: 2026-05-09 -- Completed 01-01 (Next.js scaffold + shadcn/ui)
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [█░░░░░░░░░] 4%
 
 ## Performance Metrics
 
@@ -44,7 +44,7 @@ Progress: [░░░░░░░░░░] 0%
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| - | - | - | - |
+| 01-foundation | 1 | 18min | 18min |
 
 **Recent Trend:**
 
@@ -60,6 +60,8 @@ Progress: [░░░░░░░░░░] 0%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
+- Plan 01-01: Used create-next-app@15 explicitly to pin Next.js 15 (npm latest now resolves to 16.x which renames middleware.ts to proxy.ts)
+- Plan 01-01: tw-animate-css used instead of tailwindcss-animate — shadcn v4 standard for Tailwind v4 projects
 - Phase 1: Use DATE columns (not TIMESTAMP) for all reading dates; set TZ=Europe/London in Docker Compose from day one — cannot be cheaply changed after data exists
 - Phase 1: Use iron-session (encrypted cookie) for auth; no session table needed
 - Phase 1: Create postgres.js client singleton in lib/db/client.ts (max: 5 connections) to prevent pool exhaustion

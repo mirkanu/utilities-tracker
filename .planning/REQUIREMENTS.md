@@ -10,7 +10,7 @@
 - [ ] **FOUND-01**: User can log in with a password and stay logged in across sessions
 - [ ] **FOUND-02**: User can log out from any page
 - [ ] **FOUND-03**: App is accessible via HTTPS on a public URL (Cloudflare Tunnel)
-- [ ] **FOUND-04**: App is usable on a phone (mobile-first responsive layout)
+- [x] **FOUND-04**: App is usable on a phone (mobile-first responsive layout)
 - [ ] **FOUND-05**: User can navigate between Oil and Electricity sections
 
 ### Oil Tracking
@@ -77,7 +77,7 @@ Updated during roadmap creation.
 | FOUND-01 | Phase 1 | Pending |
 | FOUND-02 | Phase 1 | Pending |
 | FOUND-03 | Phase 1 | Pending |
-| FOUND-04 | Phase 1 | Pending |
+| FOUND-04 | Phase 1 | Complete ✓ |
 | FOUND-05 | Phase 1 | Pending |
 | OIL-01 | Phase 2 | Pending |
 | OIL-02 | Phase 2 | Pending |

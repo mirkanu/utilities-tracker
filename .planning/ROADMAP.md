@@ -12,7 +12,7 @@ Four phases from blank repo to shipped app. Foundation establishes auth, databas
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Auth, database schema, Docker deploy, mobile shell, navigation
+- [x] **Phase 1: Foundation** - Auth, database schema, Docker deploy, mobile shell, navigation
 - [ ] **Phase 2: Oil Domain** - Tank readings, purchases, history, graph, depletion prediction
 - [ ] **Phase 3: Electricity Domain** - Meter readings, bills, graphs, contract, expiry alert
 - [ ] **Phase 4: Dashboard & Polish** - Unified home screen, skeleton loading, mobile QA
@@ -38,7 +38,7 @@ Plans:
 - [x] 01-03-PLAN.md — iron-session auth (middleware, login page, server actions)
 - [x] 01-04-PLAN.md — UI shell (root layout, bottom nav, route placeholders, loading skeletons, /api/health)
 - [x] 01-05-PLAN.md — Docker deploy + Cloudflare Tunnel + secrets + backup wiring
-- [ ] 01-06-PLAN.md — Playwright E2E verification of all Phase 1 success criteria
+- [x] 01-06-PLAN.md — Playwright E2E verification of all Phase 1 success criteria
 
 ### Phase 2: Oil Domain
 **Goal**: User can log and visualise oil consumption and know when the tank will run out
@@ -83,7 +83,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 5/6 | In Progress | - |
+| 1. Foundation | 6/6 | Complete | 2026-05-09 |
 | 2. Oil Domain | 0/? | Not started | - |
 | 3. Electricity Domain | 0/? | Not started | - |
 | 4. Dashboard & Polish | 0/? | Not started | - |

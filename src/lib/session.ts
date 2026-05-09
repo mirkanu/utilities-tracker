@@ -1,9 +1,5 @@
 import type { SessionOptions } from "iron-session";
 
-if (!process.env.UTILITIES_SESSION_SECRET) {
-  throw new Error("UTILITIES_SESSION_SECRET is required but not set");
-}
-
 export interface SessionData {
   isLoggedIn: boolean;
 }
@@ -13,7 +9,11 @@ export const defaultSession: SessionData = {
 };
 
 export const sessionOptions: SessionOptions = {
-  password: process.env.UTILITIES_SESSION_SECRET, // min 32 chars; generated with openssl rand -base64 32
+  // UTILITIES_SESSION_SECRET must be set at runtime (min 32 chars).
+  // iron-session validates this at first session access and throws a clear error if absent.
+  // Do not add a module-level guard here — Next.js evaluates this module at build time
+  // when env vars are not present, which would break the build.
+  password: process.env.UTILITIES_SESSION_SECRET ?? "", // empty string causes iron-session to reject at runtime
   cookieName: "utilities_session",
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",

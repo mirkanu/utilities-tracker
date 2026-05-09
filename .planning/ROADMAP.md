@@ -35,7 +35,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 - [x] 01-01-PLAN.md — Next.js 15 scaffold and shadcn/ui bootstrap
 - [x] 01-02-PLAN.md — Drizzle ORM database layer (schema, migrations, postgres.js client)
-- [ ] 01-03-PLAN.md — iron-session auth (middleware, login page, server actions)
+- [x] 01-03-PLAN.md — iron-session auth (middleware, login page, server actions)
 - [ ] 01-04-PLAN.md — UI shell (root layout, bottom nav, route placeholders, loading skeletons, /api/health)
 - [ ] 01-05-PLAN.md — Docker deploy + Cloudflare Tunnel + secrets + backup wiring
 - [ ] 01-06-PLAN.md — Playwright E2E verification of all Phase 1 success criteria
@@ -83,7 +83,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 2/6 | In Progress | - |
+| 1. Foundation | 3/6 | In Progress | - |
 | 2. Oil Domain | 0/? | Not started | - |
 | 3. Electricity Domain | 0/? | Not started | - |
 | 4. Dashboard & Polish | 0/? | Not started | - |

@@ -42,5 +42,6 @@ COPY --from=deps-prod /app/node_modules ./node_modules
 
 EXPOSE 3000
 
-# Run migrations then start the Next.js standalone server
-CMD sh -c "tsx scripts/migrate.ts && node server.js"
+# Run migrations then start the Next.js standalone server.
+# The || clause makes migration failure visible in container logs before aborting.
+CMD sh -c "tsx scripts/migrate.ts || (echo 'MIGRATION FAILED — aborting startup' && exit 1); node server.js"

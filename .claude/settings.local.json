@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(gsd-plan-phase)",
+      "WebSearch",
+      "Skill(gsd-execute-phase)",
+      "Bash(mkdir -p /tmp/ut-backup)",
+      "Bash(mv .claude .planning CLAUDE.md /tmp/ut-backup/)",
+      "Skill(gsd-code-review)",
+      "Skill(gsd-ui-phase)"
+    ]
+  }
+}

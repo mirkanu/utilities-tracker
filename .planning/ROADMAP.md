@@ -62,8 +62,15 @@ Plans:
   3. The app shows a graph of monthly electricity usage (kWh) and a graph of monthly cost (£) over time
   4. User can enter or edit the active electricity contract (provider, unit rate, type, expiry date)
   5. The app shows a visible warning banner when the contract is within 90, 60, or 30 days of expiry
-**Plans**: TBD
+**Plans**: 5 plans
 **UI hint**: yes
+
+Plans:
+- [ ] 03-01-PLAN.md — Server actions (CRUD + contract upsert) and shared DeleteDialog
+- [ ] 03-02-PLAN.md — ReadingsSection and BillsSection (Sheet form + list + optimistic delete)
+- [ ] 03-03-PLAN.md — UsageChart, CostChart, ContractExpiryBanner, ContractSection
+- [ ] 03-04-PLAN.md — ElectricityPage server component + loading skeleton (wave-3 integration)
+- [ ] 03-05-PLAN.md — Playwright E2E verification of all 8 ELEC requirements
 
 ### Phase 4: Dashboard & Polish
 **Goal**: User sees both utilities summarised on the home screen, with fast load states and a polished mobile experience

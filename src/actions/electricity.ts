@@ -83,16 +83,19 @@ export async function upsertElectricityContract(
   _prevState: { error: string; ok?: boolean } | null,
   formData: FormData
 ): Promise<{ error: string; ok?: boolean }> {
-  const provider = (formData.get("provider") as string).trim();
+  const providerRaw = formData.get("provider");
+  if (!providerRaw) {
+    return { error: "Please enter the provider name." };
+  }
+  const provider = (providerRaw as string).trim();
+  if (!provider) {
+    return { error: "Please enter the provider name." };
+  }
   const unitRateRaw = formData.get("unitRate") as string;
   const contractType = formData.get("contractType") as string;
   const expiryRaw = formData.get("expiryDate") as string;
   const notesRaw = formData.get("notes") as string;
   const notes = notesRaw || null;
-
-  if (!provider) {
-    return { error: "Please enter the provider name." };
-  }
 
   const unitRate = parseFloat(unitRateRaw);
   if (!unitRateRaw || isNaN(unitRate) || unitRate <= 0) {

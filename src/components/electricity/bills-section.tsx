@@ -105,7 +105,7 @@ export function BillsSection({ initialBills }: { initialBills: Bill[] }) {
           <h2 className="text-lg font-semibold">Bills</h2>
           <span className="text-sm text-muted-foreground">{total}</span>
         </div>
-        <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+        <Sheet open={sheetOpen} onOpenChange={(open) => { setSheetOpen(open); if (!open) setFormKey((k) => k + 1); }}>
           <SheetTrigger render={<Button variant="outline" size="sm" className="active:scale-95 active:opacity-80" />}>
             Add Bill
           </SheetTrigger>

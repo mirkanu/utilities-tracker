@@ -76,7 +76,7 @@ export function ContractSection({ contract }: ContractSectionProps) {
       {/* Section header */}
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-lg font-semibold">Contract</h2>
-        <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+        <Sheet open={sheetOpen} onOpenChange={(open) => { setSheetOpen(open); if (!open) setFormKey((k) => k + 1); }}>
           <SheetTrigger
             render={
               <Button

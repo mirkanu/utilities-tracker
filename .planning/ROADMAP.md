@@ -70,7 +70,7 @@ Plans:
 - [x] 03-02-PLAN.md — ReadingsSection and BillsSection (Sheet form + list + optimistic delete)
 - [x] 03-03-PLAN.md — UsageChart, CostChart, ContractExpiryBanner, ContractSection
 - [x] 03-04-PLAN.md — ElectricityPage server component + loading skeleton (wave-3 integration)
-- [ ] 03-05-PLAN.md — Playwright E2E verification of all 8 ELEC requirements
+- [x] 03-05-PLAN.md — Playwright E2E verification of all 8 ELEC requirements
 
 ### Phase 4: Dashboard & Polish
 **Goal**: User sees both utilities summarised on the home screen, with fast load states and a polished mobile experience

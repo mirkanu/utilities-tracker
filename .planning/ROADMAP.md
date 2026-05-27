@@ -66,10 +66,10 @@ Plans:
 **UI hint**: yes
 
 Plans:
-- [ ] 03-01-PLAN.md — Server actions (CRUD + contract upsert) and shared DeleteDialog
-- [ ] 03-02-PLAN.md — ReadingsSection and BillsSection (Sheet form + list + optimistic delete)
-- [ ] 03-03-PLAN.md — UsageChart, CostChart, ContractExpiryBanner, ContractSection
-- [ ] 03-04-PLAN.md — ElectricityPage server component + loading skeleton (wave-3 integration)
+- [x] 03-01-PLAN.md — Server actions (CRUD + contract upsert) and shared DeleteDialog
+- [x] 03-02-PLAN.md — ReadingsSection and BillsSection (Sheet form + list + optimistic delete)
+- [x] 03-03-PLAN.md — UsageChart, CostChart, ContractExpiryBanner, ContractSection
+- [x] 03-04-PLAN.md — ElectricityPage server component + loading skeleton (wave-3 integration)
 - [ ] 03-05-PLAN.md — Playwright E2E verification of all 8 ELEC requirements
 
 ### Phase 4: Dashboard & Polish
@@ -92,5 +92,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 6/6 | Complete | 2026-05-09 |
 | 2. Oil Domain | 0/? | Not started | - |
-| 3. Electricity Domain | 0/? | Not started | - |
+| 3. Electricity Domain | 4/5 | In Progress|  |
 | 4. Dashboard & Polish | 0/? | Not started | - |

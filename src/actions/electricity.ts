@@ -106,17 +106,24 @@ export async function upsertElectricityContract(
     return { error: "Please select a contract type." };
   }
 
-  // Step 1: Deactivate all currently active contracts
-  await db.update(electricityContracts).set({ isActive: false }).where(eq(electricityContracts.isActive, true));
+  // Atomic: deactivate existing active contracts and insert new one in one transaction.
+  // Without a transaction, a crash between the two statements leaves zero active contracts.
+  await db.transaction(async (tx) => {
+    // Step 1: Deactivate all currently active contracts
+    await tx
+      .update(electricityContracts)
+      .set({ isActive: false })
+      .where(eq(electricityContracts.isActive, true));
 
-  // Step 2: Insert new active contract
-  await db.insert(electricityContracts).values({
-    provider,
-    unitRatePence: unitRateRaw, // numeric column accepts string
-    contractType,
-    expiryDate: expiryRaw || null, // null for rolling contracts
-    isActive: true,
-    notes,
+    // Step 2: Insert new active contract
+    await tx.insert(electricityContracts).values({
+      provider,
+      unitRatePence: unitRateRaw, // numeric column accepts string
+      contractType,
+      expiryDate: expiryRaw || null, // null for rolling contracts
+      isActive: true,
+      notes,
+    });
   });
 
   revalidatePath("/electricity");

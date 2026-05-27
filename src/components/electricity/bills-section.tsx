@@ -197,10 +197,13 @@ export function BillsSection({ initialBills }: { initialBills: Bill[] }) {
               </div>
               <button
                 onClick={() => setDeleteTarget(b)}
+                disabled={isDeleting}
+                aria-disabled={isDeleting}
                 className={cn(
                   "flex size-11 items-center justify-center rounded-md",
                   "text-muted-foreground hover:text-destructive",
-                  "active:scale-95 active:opacity-80"
+                  "active:scale-95 active:opacity-80",
+                  isDeleting && "pointer-events-none opacity-40"
                 )}
                 aria-label={`Delete bill for ${formatBillMonth(b.billMonth)}`}
               >

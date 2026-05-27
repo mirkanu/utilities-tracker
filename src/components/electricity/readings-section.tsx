@@ -181,10 +181,13 @@ export function ReadingsSection({ initialReadings }: { initialReadings: Reading[
               </div>
               <button
                 onClick={() => setDeleteTarget(r)}
+                disabled={isDeleting}
+                aria-disabled={isDeleting}
                 className={cn(
                   "flex size-11 items-center justify-center rounded-md",
                   "text-muted-foreground hover:text-destructive",
-                  "active:scale-95 active:opacity-80"
+                  "active:scale-95 active:opacity-80",
+                  isDeleting && "pointer-events-none opacity-40"
                 )}
                 aria-label={`Delete reading from ${formatDate(r.readingDate)}`}
               >

@@ -12,22 +12,26 @@ See at a glance how much oil and electricity you're using, know when the oil wil
 
 ### Validated
 
-(None yet — ship to validate)
+**Foundation (Phase 1):** Auth, DB schema, Docker deploy, Cloudflare Tunnel — all live at https://utilities.gsdlabs.dev/
+
+**Heating Oil (Phase 2):** Tank readings, oil purchases, depletion chart, segment-based depletion prediction — verified E2E.
+
+**Electricity (Phase 3):** Meter readings, monthly bills, usage/cost BarCharts, contract upsert, contract expiry banner (3 tiers: amber 31–90d, red ≤30d, hidden when rolling) — all 8 ELEC requirements verified E2E 2026-05-27.
 
 ### Active
 
 **Heating Oil**
-- [ ] Log oil tank height reading in cm (dated, every 1–4 weeks)
-- [ ] Log oil purchases: date, total liters, total cost
-- [ ] Graph tank height over time (cm)
-- [ ] Predict estimated date tank will run empty (linear depletion rate)
+- [x] Log oil tank height reading in cm (dated, every 1–4 weeks)
+- [x] Log oil purchases: date, total liters, total cost
+- [x] Graph tank height over time (cm)
+- [x] Predict estimated date tank will run empty (linear depletion rate)
 
 **Electricity**
-- [ ] Log monthly electricity meter reading (kWh, date)
-- [ ] Log monthly electricity bill: month, total cost, total kWh consumed
-- [ ] Graph electricity usage and cost over time (monthly)
-- [ ] Track electricity contract: provider, tariff/unit rate, contract type (fixed vs variable), expiry date
-- [ ] Alert (in-app) when electricity contract is expiring (configurable lead time, e.g. 30/60/90 days)
+- [x] Log monthly electricity meter reading (kWh, date)
+- [x] Log monthly electricity bill: month, total cost, total kWh consumed
+- [x] Graph electricity usage and cost over time (monthly)
+- [x] Track electricity contract: provider, tariff/unit rate, contract type (fixed vs variable), expiry date
+- [x] Alert (in-app) when electricity contract is expiring (configurable lead time, e.g. 30/60/90 days)
 
 **Foundation**
 - [ ] Password-protected login (single user)
@@ -84,4 +88,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-09 after initialization*
+*Last updated: 2026-05-27 — Phase 3 complete (electricity domain)*

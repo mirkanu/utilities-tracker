@@ -130,7 +130,7 @@ export function ReadingsSection({ initialReadings }: { initialReadings: Reading[
                 <Input
                   type="date"
                   name="date"
-                  defaultValue={new Date().toISOString().split("T")[0]}
+                  defaultValue={new Date().toLocaleDateString("en-CA")}
                   className="text-base min-h-[44px]"
                   aria-label="Reading date"
                 />

@@ -24,6 +24,9 @@ export async function addElectricityReading(
   if (!date) {
     return { error: "Please select a date." };
   }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    return { error: "Please select a valid date." };
+  }
 
   await db.insert(electricityReadings).values({
     readingDate: date,    // DATE column — plain "YYYY-MM-DD" string, never new Date()
@@ -49,6 +52,9 @@ export async function addElectricityBill(
 
   if (!billMonthRaw) {
     return { error: "Please select the billing month." };
+  }
+  if (!/^\d{4}-\d{2}$/.test(billMonthRaw)) {
+    return { error: "Please select a valid billing month." };
   }
 
   const kwh = parseFloat(totalKwhRaw);
@@ -104,6 +110,10 @@ export async function upsertElectricityContract(
 
   if (contractType !== "fixed" && contractType !== "variable") {
     return { error: "Please select a contract type." };
+  }
+
+  if (expiryRaw && !/^\d{4}-\d{2}-\d{2}$/.test(expiryRaw)) {
+    return { error: "Please select a valid expiry date." };
   }
 
   // Atomic: deactivate existing active contracts and insert new one in one transaction.

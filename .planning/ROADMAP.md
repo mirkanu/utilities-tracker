@@ -49,8 +49,14 @@ Plans:
   2. User can log an oil purchase (date, litres, cost) and it appears in purchase history newest-first
   3. The app shows a graph of tank height over time with oil purchases marked as refill events
   4. The app displays an estimated date (and countdown in days) when the tank will run empty, calculated from readings since the last refill
-**Plans**: TBD
+**Plans**: 4 plans
 **UI hint**: yes
+
+Plans:
+- [ ] 04-01-PLAN.md — Extract computeDaysToExpiry util + create OilStatCard and ElectricityStatCard components
+- [ ] 04-02-PLAN.md — Update BottomNav: add Home tab and fix active-state exclusivity
+- [ ] 04-03-PLAN.md — Dashboard page.tsx (Server Component) and loading.tsx skeleton
+- [ ] 04-04-PLAN.md — Playwright E2E mobile QA pass at 375px viewport
 
 ### Phase 3: Electricity Domain
 **Goal**: User can log electricity usage and bills, view consumption graphs, and track contract expiry
@@ -80,8 +86,19 @@ Plans:
   1. The home screen shows current oil level (cm), days to empty, last electricity bill cost and kWh, and contract expiry countdown — all without navigating away
   2. Every page shows a skeleton placeholder instantly on navigation rather than a blank screen
   3. The app passes a full mobile viewport QA pass (no layout overflow, all tap targets reachable, charts render correctly on a phone screen)
-**Plans**: TBD
+**Plans**: 4 plans
 **UI hint**: yes
+
+Plans:
+**Wave 1**
+- [ ] 04-01-PLAN.md — Extract computeDaysToExpiry util + create OilStatCard and ElectricityStatCard components
+- [ ] 04-02-PLAN.md — Update BottomNav: add Home tab and fix active-state exclusivity
+
+**Wave 2** *(blocked on Wave 1 completion)*
+- [ ] 04-03-PLAN.md — Dashboard page.tsx (Server Component) and loading.tsx skeleton
+
+**Wave 3** *(blocked on Wave 2 completion)*
+- [ ] 04-04-PLAN.md — Playwright E2E mobile QA pass at 375px viewport
 
 ## Progress
 

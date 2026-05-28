@@ -14,6 +14,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { cmToLitres } from "@/lib/oil-config";
 
 interface TankChartProps {
   readings: { readingDate: string; heightCm: number }[];
@@ -102,7 +103,10 @@ export function TankChart({ readings, purchases }: TankChartProps) {
                   year: "numeric",
                 })
               }
-              formatter={(value: unknown) => [`${value} cm`, "Tank Level"]}
+              formatter={(value: unknown) => [
+                  `${value} cm / ~${cmToLitres(Number(value))} L`,
+                  "Tank Level",
+                ]}
             />
           }
         />

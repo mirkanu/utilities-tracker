@@ -6,6 +6,7 @@ import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 import { Trash2, Inbox, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { cmToLitres } from "@/lib/oil-config";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -165,7 +166,9 @@ export function ReadingsSection({ initialReadings }: { initialReadings: Reading[
             <div key={r.id} className="flex items-center justify-between py-3">
               <div>
                 <p className="text-base">{formatDate(r.readingDate)}</p>
-                <p className="text-base font-semibold">{r.heightCm} cm</p>
+                <p className="text-base font-semibold">
+                  {r.heightCm} cm / ~{cmToLitres(r.heightCm)} L
+                </p>
               </div>
               <button
                 onClick={() => setDeleteTarget(r)}

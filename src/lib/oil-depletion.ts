@@ -7,9 +7,13 @@ export interface OilPurchase {
   purchaseDate: string; // "YYYY-MM-DD"
 }
 
+import { CM_TO_LITRES_RATIO } from "./oil-config";
+
 export interface DepletionResult {
   daysRemaining: number | null; // null = insufficient data or tank not depleting
   emptyDate: Date | null;
+  litresRemaining: number | null; // null when daysRemaining is null
+  litresPerDay: number | null;    // null when daysRemaining is null; rounded to 1 decimal place
 }
 
 const MS_PER_DAY = 86_400_000;
@@ -18,7 +22,12 @@ export function computeDepletion(
   readings: OilReading[],
   purchases: OilPurchase[]
 ): DepletionResult {
-  const insufficient: DepletionResult = { daysRemaining: null, emptyDate: null };
+  const insufficient: DepletionResult = {
+    daysRemaining: null,
+    emptyDate: null,
+    litresRemaining: null,
+    litresPerDay: null,
+  };
 
   // Guard: no purchases means no segment to calculate from
   if (purchases.length === 0) return insufficient;
@@ -73,5 +82,11 @@ export function computeDepletion(
   const daysRemaining = Math.round(currentEstimatedHeight / Math.abs(slope));
   const emptyDate = new Date(today.getTime() + daysRemaining * MS_PER_DAY);
 
-  return { daysRemaining, emptyDate };
+  // litresRemaining is derived from the most recent SENSOR reading, not the regression
+  // projection — keeps the measured snapshot honest vs. the modelled days countdown.
+  const latestReading = segmentReadings[segmentReadings.length - 1];
+  const litresRemaining = Math.round(latestReading.heightCm * CM_TO_LITRES_RATIO);
+  const litresPerDay = Math.round(Math.abs(slope) * CM_TO_LITRES_RATIO * 10) / 10;
+
+  return { daysRemaining, emptyDate, litresRemaining, litresPerDay };
 }

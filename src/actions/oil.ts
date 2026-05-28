@@ -30,6 +30,7 @@ export async function addOilReading(
   });
 
   revalidatePath("/oil");
+  revalidatePath("/");
   return { error: "", ok: true };
 }
 
@@ -64,6 +65,7 @@ export async function addOilPurchase(
   });
 
   revalidatePath("/oil");
+  revalidatePath("/");
   return { error: "", ok: true };
 }
 
@@ -73,6 +75,7 @@ export async function addOilPurchase(
 export async function deleteOilReading(id: number): Promise<void> {
   await db.delete(oilReadings).where(eq(oilReadings.id, id));
   revalidatePath("/oil");
+  revalidatePath("/");
 }
 
 // --- DELETE PURCHASE ---
@@ -80,4 +83,5 @@ export async function deleteOilReading(id: number): Promise<void> {
 export async function deleteOilPurchase(id: number): Promise<void> {
   await db.delete(oilPurchases).where(eq(oilPurchases.id, id));
   revalidatePath("/oil");
+  revalidatePath("/");
 }

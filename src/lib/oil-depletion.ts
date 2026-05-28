@@ -51,12 +51,17 @@ export function computeDepletion(
   // Guard: require at least 2 readings in the current segment
   if (segmentReadings.length < 2) return insufficient;
 
+  // Parse date strings at noon local time to avoid UTC-offset drift (CLAUDE.md requirement).
+  // new Date("YYYY-MM-DD") parses as UTC midnight; adding T12:00:00 keeps arithmetic
+  // in local time so x-values are always whole integers in whole-day steps.
+  const parseLocalDate = (s: string) => new Date(s + "T12:00:00");
+
   // Least-squares linear regression (cm per day)
   // x = days since first segment reading, y = height cm
   // More robust than two-point slope — guards against noisy endpoint readings
-  const t0 = new Date(segmentReadings[0].readingDate).getTime();
+  const t0 = parseLocalDate(segmentReadings[0].readingDate).getTime();
   const xs = segmentReadings.map(
-    (r) => (new Date(r.readingDate).getTime() - t0) / MS_PER_DAY
+    (r) => (parseLocalDate(r.readingDate).getTime() - t0) / MS_PER_DAY
   );
   const ys = segmentReadings.map((r) => r.heightCm);
 
@@ -66,14 +71,18 @@ export function computeDepletion(
   const sumXY = xs.reduce((acc, x, i) => acc + x * ys[i], 0);
   const sumXX = xs.reduce((acc, x) => acc + x * x, 0);
 
-  const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+  // Guard: zero denominator when all readings fall on the same calendar day
+  const denom = n * sumXX - sumX * sumX;
+  if (denom === 0) return insufficient;
+
+  const slope = (n * sumXY - sumX * sumY) / denom;
   // slope is cm/day — expected to be negative (tank depleting)
   const intercept = (sumY - slope * sumX) / n;
 
   // Estimate current tank height from today's position on the regression line
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const daysSinceFirst = (today.getTime() - new Date(segmentReadings[0].readingDate).getTime()) / MS_PER_DAY;
+  today.setHours(12, 0, 0, 0); // noon today, matching parseLocalDate
+  const daysSinceFirst = (today.getTime() - parseLocalDate(segmentReadings[0].readingDate).getTime()) / MS_PER_DAY;
   const currentEstimatedHeight = intercept + slope * daysSinceFirst;
 
   // Guard: tank not depleting or model says already empty

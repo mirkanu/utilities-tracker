@@ -44,17 +44,21 @@ export async function addElectricityBill(
   _prevState: { error: string; ok?: boolean } | null,
   formData: FormData
 ): Promise<{ error: string; ok?: boolean }> {
-  const billMonthRaw = formData.get("billMonth") as string;
+  const periodStartRaw = formData.get("periodStart") as string;
+  const periodEndRaw = formData.get("periodEnd") as string;
   const totalKwhRaw = formData.get("totalKwh") as string;
   const totalCostGbpRaw = formData.get("totalCostGbp") as string;
   const notesRaw = formData.get("notes") as string;
   const notes = notesRaw || null;
 
-  if (!billMonthRaw) {
-    return { error: "Please select the billing month." };
+  if (!periodStartRaw || !/^\d{4}-\d{2}-\d{2}$/.test(periodStartRaw)) {
+    return { error: "Please select a valid period start date." };
   }
-  if (!/^\d{4}-\d{2}$/.test(billMonthRaw)) {
-    return { error: "Please select a valid billing month." };
+  if (!periodEndRaw || !/^\d{4}-\d{2}-\d{2}$/.test(periodEndRaw)) {
+    return { error: "Please select a valid period end date." };
+  }
+  if (periodEndRaw < periodStartRaw) {
+    return { error: "Period end must be on or after period start." };
   }
 
   const kwh = parseFloat(totalKwhRaw);
@@ -67,11 +71,9 @@ export async function addElectricityBill(
     return { error: "Please enter a valid cost." };
   }
 
-  // Coerce "YYYY-MM" (HTML month input) → "YYYY-MM-01" (safe DATE string)
-  const billMonthDate = billMonthRaw + "-01";
-
   await db.insert(electricityBills).values({
-    billMonth: billMonthDate,      // DATE column — first of billing month
+    periodStart: periodStartRaw,   // DATE column — first day of billing period
+    periodEnd: periodEndRaw,       // DATE column — last day of billing period
     totalKwh: totalKwhRaw,         // numeric column accepts string
     totalCostGbp: totalCostGbpRaw, // numeric column accepts string
     notes,
@@ -98,6 +100,7 @@ export async function upsertElectricityContract(
     return { error: "Please enter the provider name." };
   }
   const unitRateRaw = formData.get("unitRate") as string;
+  const standingChargeRaw = formData.get("standingCharge") as string;
   const contractType = formData.get("contractType") as string;
   const expiryRaw = formData.get("expiryDate") as string;
   const notesRaw = formData.get("notes") as string;
@@ -106,6 +109,11 @@ export async function upsertElectricityContract(
   const unitRate = parseFloat(unitRateRaw);
   if (!unitRateRaw || isNaN(unitRate) || unitRate <= 0) {
     return { error: "Please enter a valid unit rate." };
+  }
+
+  const standingCharge = standingChargeRaw ? parseFloat(standingChargeRaw) : null;
+  if (standingChargeRaw && (isNaN(standingCharge!) || standingCharge! < 0)) {
+    return { error: "Please enter a valid standing charge." };
   }
 
   if (contractType !== "fixed" && contractType !== "variable") {
@@ -128,7 +136,8 @@ export async function upsertElectricityContract(
     // Step 2: Insert new active contract
     await tx.insert(electricityContracts).values({
       provider,
-      unitRatePence: unitRateRaw, // numeric column accepts string
+      unitRatePence: unitRateRaw,                                  // numeric column accepts string
+      standingChargePence: standingChargeRaw || null,              // null if not provided
       contractType,
       expiryDate: expiryRaw || null, // null for rolling contracts
       isActive: true,

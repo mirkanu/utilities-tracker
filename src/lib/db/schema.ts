@@ -36,7 +36,8 @@ export const electricityReadings = pgTable("electricity_readings", {
 
 export const electricityBills = pgTable("electricity_bills", {
   id: serial("id").primaryKey(),
-  billMonth: date("bill_month").notNull(), // DATE: first day of the billing month
+  periodStart: date("period_start").notNull(), // DATE: first day of the billing period
+  periodEnd: date("period_end").notNull(),     // DATE: last day of the billing period
   totalCostGbp: numeric("total_cost_gbp", { precision: 8, scale: 2 }).notNull(),
   totalKwh: numeric("total_kwh", { precision: 10, scale: 2 }).notNull(),
   notes: text("notes"),
@@ -46,6 +47,7 @@ export const electricityContracts = pgTable("electricity_contracts", {
   id: serial("id").primaryKey(),
   provider: text("provider").notNull(),
   unitRatePence: numeric("unit_rate_pence", { precision: 6, scale: 3 }).notNull(),
+  standingChargePence: numeric("standing_charge_pence", { precision: 6, scale: 3 }), // nullable — p/day
   contractType: text("contract_type").notNull(), // 'fixed' | 'variable'
   expiryDate: date("expiry_date"), // nullable — rolling contracts have no expiry
   isActive: boolean("is_active").notNull().default(true),

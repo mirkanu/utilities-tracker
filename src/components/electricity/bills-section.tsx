@@ -20,24 +20,65 @@ import { addElectricityBill, deleteElectricityBill } from "@/actions/electricity
 
 const PAGE_SIZE = 10;
 
-// Bill month display: "January 2026" (month + year only — no day)
-// Append T12:00:00 to avoid UTC midnight / BST +1hr off-by-one-day bug
-function formatBillMonth(billMonth: string): string {
-  return new Date(billMonth + "T12:00:00").toLocaleDateString("en-GB", {
-    month: "long",
+function formatPeriod(startStr: string, endStr: string): string {
+  const start = new Date(startStr + "T12:00:00");
+  const end = new Date(endStr + "T12:00:00");
+  const sameYear = start.getFullYear() === end.getFullYear();
+  const startFmt = start.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: sameYear ? undefined : "numeric",
+  });
+  const endFmt = end.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
     year: "numeric",
   });
+  return `${startFmt} – ${endFmt}`;
+}
+
+/** Inclusive day count between two YYYY-MM-DD strings */
+function daysBetween(startStr: string, endStr: string): number {
+  const ms = new Date(endStr + "T12:00:00").getTime() - new Date(startStr + "T12:00:00").getTime();
+  return Math.round(ms / 86_400_000) + 1;
+}
+
+/** Calculate estimated cost in £ from usage + contract rates */
+function calcCost(
+  kwhStr: string,
+  startStr: string,
+  endStr: string,
+  unitRatePence: string | null,
+  standingChargePence: string | null
+): string | null {
+  const kwh = parseFloat(kwhStr);
+  const unit = parseFloat(unitRatePence ?? "");
+  if (!kwhStr || isNaN(kwh) || !unitRatePence || isNaN(unit)) return null;
+  if (!startStr || !endStr || endStr < startStr) return null;
+
+  const days = daysBetween(startStr, endStr);
+  const unitCost = (kwh * unit) / 100;
+  const standing = standingChargePence ? (parseFloat(standingChargePence) * days) / 100 : 0;
+  if (isNaN(standing)) return null;
+
+  return (unitCost + standing).toFixed(2);
 }
 
 interface Bill {
   id: number;
-  billMonth: string;       // "YYYY-MM-DD" (first of month)
-  totalKwh: string;        // numeric → string from Drizzle
-  totalCostGbp: string;    // numeric → string from Drizzle
+  periodStart: string;
+  periodEnd: string;
+  totalKwh: string;
+  totalCostGbp: string;
   notes: string | null;
 }
 
-// Inner submit button uses useFormStatus — must be a separate component inside the form
+interface BillsSectionProps {
+  initialBills: Bill[];
+  unitRatePence: string | null;
+  standingChargePence: string | null;
+}
+
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
@@ -52,7 +93,7 @@ function SubmitButton() {
   );
 }
 
-export function BillsSection({ initialBills }: { initialBills: Bill[] }) {
+export function BillsSection({ initialBills, unitRatePence, standingChargePence }: BillsSectionProps) {
   const [shown, setShown] = useState(PAGE_SIZE);
   const [deletedIds, setDeletedIds] = useState<Set<number>>(new Set());
   const [deleteTarget, setDeleteTarget] = useState<Bill | null>(null);
@@ -61,18 +102,35 @@ export function BillsSection({ initialBills }: { initialBills: Bill[] }) {
   const [formKey, setFormKey] = useState(0);
   const [state, formAction] = useActionState(addElectricityBill, null);
 
+  // Live calculation state
+  const [previewKwh, setPreviewKwh] = useState("");
+  const [previewStart, setPreviewStart] = useState("");
+  const [previewEnd, setPreviewEnd] = useState("");
+  const [previewCost, setPreviewCost] = useState("");
+
   useEffect(() => {
     if (state?.ok) {
       toast("Bill saved");
       setSheetOpen(false);
       setFormKey((k) => k + 1);
+      setPreviewKwh("");
+      setPreviewStart("");
+      setPreviewEnd("");
+      setPreviewCost("");
     }
   }, [state]);
+
+  // Auto-calculate cost when kWh or period changes
+  useEffect(() => {
+    const calculated = calcCost(previewKwh, previewStart, previewEnd, unitRatePence, standingChargePence);
+    if (calculated !== null) {
+      setPreviewCost(calculated);
+    }
+  }, [previewKwh, previewStart, previewEnd, unitRatePence, standingChargePence]);
 
   async function handleDelete() {
     if (!deleteTarget) return;
     const id = deleteTarget.id;
-    // Optimistic: remove immediately
     setDeletedIds((prev) => new Set([...prev, id]));
     setDeleteTarget(null);
     setIsDeleting(true);
@@ -80,7 +138,6 @@ export function BillsSection({ initialBills }: { initialBills: Bill[] }) {
       await deleteElectricityBill(id);
       toast("Deleted");
     } catch {
-      // Revert on error
       setDeletedIds((prev) => {
         const next = new Set(prev);
         next.delete(id);
@@ -96,6 +153,23 @@ export function BillsSection({ initialBills }: { initialBills: Bill[] }) {
   const visible = filtered.slice(0, shown);
   const hasMore = filtered.length > shown;
   const total = filtered.length;
+
+  // Preview breakdown hint
+  const hasRates = unitRatePence && parseFloat(unitRatePence) > 0;
+  const daysPreview = previewStart && previewEnd && previewEnd >= previewStart
+    ? daysBetween(previewStart, previewEnd)
+    : null;
+  const costHint = hasRates && previewKwh && daysPreview
+    ? (() => {
+        const unit = parseFloat(unitRatePence!);
+        const sc = standingChargePence ? parseFloat(standingChargePence) : 0;
+        const unitPart = ((parseFloat(previewKwh) * unit) / 100).toFixed(2);
+        const scPart = ((sc * daysPreview) / 100).toFixed(2);
+        return standingChargePence
+          ? `£${unitPart} usage + £${scPart} standing (${daysPreview} days)`
+          : `£${unitPart} usage`;
+      })()
+    : null;
 
   return (
     <section>
@@ -115,13 +189,29 @@ export function BillsSection({ initialBills }: { initialBills: Bill[] }) {
             </SheetHeader>
             <form key={formKey} action={formAction} className="space-y-4 px-4 pb-6 pt-4">
               <div className="space-y-1">
-                <label htmlFor="elec-bill-month" className="text-sm font-medium">Billing month</label>
+                <label htmlFor="elec-bill-start" className="text-sm font-medium">Period start</label>
                 <Input
-                  id="elec-bill-month"
-                  type="month"
-                  name="billMonth"
+                  id="elec-bill-start"
+                  type="date"
+                  name="periodStart"
                   className="text-base min-h-[44px]"
+                  value={previewStart}
+                  onChange={(e) => setPreviewStart(e.target.value)}
                 />
+              </div>
+              <div className="space-y-1">
+                <label htmlFor="elec-bill-end" className="text-sm font-medium">Period end</label>
+                <Input
+                  id="elec-bill-end"
+                  type="date"
+                  name="periodEnd"
+                  className="text-base min-h-[44px]"
+                  value={previewEnd}
+                  onChange={(e) => setPreviewEnd(e.target.value)}
+                />
+                {daysPreview !== null && (
+                  <p className="text-sm text-muted-foreground">{daysPreview} days</p>
+                )}
               </div>
               <div className="space-y-1">
                 <label htmlFor="elec-bill-kwh" className="text-sm font-medium">Usage (kWh)</label>
@@ -134,6 +224,8 @@ export function BillsSection({ initialBills }: { initialBills: Bill[] }) {
                   step="0.1"
                   inputMode="decimal"
                   className="text-base min-h-[44px]"
+                  value={previewKwh}
+                  onChange={(e) => setPreviewKwh(e.target.value)}
                 />
               </div>
               <div className="space-y-1">
@@ -147,7 +239,12 @@ export function BillsSection({ initialBills }: { initialBills: Bill[] }) {
                   step="0.01"
                   inputMode="decimal"
                   className="text-base min-h-[44px]"
+                  value={previewCost}
+                  onChange={(e) => setPreviewCost(e.target.value)}
                 />
+                {costHint && (
+                  <p className="text-sm text-muted-foreground">{costHint}</p>
+                )}
               </div>
               <div className="space-y-1">
                 <label htmlFor="elec-bill-notes" className="text-sm font-medium">Notes (optional)</label>
@@ -189,12 +286,12 @@ export function BillsSection({ initialBills }: { initialBills: Bill[] }) {
           {visible.map((b) => (
             <div key={b.id} className="flex items-center justify-between py-3">
               <div className="flex-1">
-                <p className="text-base font-semibold">{formatBillMonth(b.billMonth)}</p>
+                <p className="text-sm text-muted-foreground">{formatPeriod(b.periodStart, b.periodEnd)}</p>
                 <div className="flex items-baseline gap-3">
                   <p className="text-base">
                     {parseFloat(b.totalKwh).toLocaleString("en-GB")} kWh
                   </p>
-                  <p className="text-base">
+                  <p className="text-base font-semibold">
                     £{parseFloat(b.totalCostGbp).toFixed(2)}
                   </p>
                 </div>
@@ -209,7 +306,7 @@ export function BillsSection({ initialBills }: { initialBills: Bill[] }) {
                   "active:scale-95 active:opacity-80",
                   isDeleting && "pointer-events-none opacity-40"
                 )}
-                aria-label={`Delete bill for ${formatBillMonth(b.billMonth)}`}
+                aria-label={`Delete bill for ${formatPeriod(b.periodStart, b.periodEnd)}`}
               >
                 <Trash2 className="h-4 w-4" />
               </button>
@@ -235,7 +332,7 @@ export function BillsSection({ initialBills }: { initialBills: Bill[] }) {
         title="Delete this bill?"
         description={
           deleteTarget
-            ? `This will permanently remove the bill for ${formatBillMonth(deleteTarget.billMonth)}. This cannot be undone.`
+            ? `This will permanently remove the bill for ${formatPeriod(deleteTarget.periodStart, deleteTarget.periodEnd)}. This cannot be undone.`
             : ""
         }
         confirmLabel="Delete bill"

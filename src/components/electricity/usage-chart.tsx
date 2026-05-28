@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/chart";
 
 interface BillForChart {
-  billMonth: string;
+  periodStart: string;
   totalKwh: string;
   totalCostGbp: string;
 }
@@ -29,9 +29,9 @@ export function UsageChart({ bills }: UsageChartProps) {
   if (bills.length === 0) return null;
 
   const data = [...bills]
-    .sort((a, b) => a.billMonth.localeCompare(b.billMonth))
+    .sort((a, b) => a.periodStart.localeCompare(b.periodStart))
     .map((b) => ({
-      month: b.billMonth,
+      month: b.periodStart,
       totalKwh: parseFloat(b.totalKwh),
     }));
 

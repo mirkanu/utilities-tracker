@@ -23,7 +23,7 @@ export default async function HomePage() {
     db
       .select()
       .from(electricityBills)
-      .orderBy(desc(electricityBills.billMonth))
+      .orderBy(desc(electricityBills.periodStart))
       .limit(1),
     db
       .select()

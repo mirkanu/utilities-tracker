@@ -20,6 +20,7 @@ interface Contract {
   id: number;
   provider: string;
   unitRatePence: string;
+  standingChargePence: string | null;
   contractType: string;
   expiryDate: string | null;
   notes: string | null;
@@ -121,11 +122,25 @@ export function ContractSection({ contract }: ContractSectionProps) {
                   name="unitRate"
                   type="number"
                   inputMode="decimal"
-                  step="0.01"
+                  step="0.001"
                   min={0}
                   defaultValue={contract?.unitRatePence ?? ""}
                   placeholder="e.g. 25.40"
                   required
+                  className="text-base min-h-[44px]"
+                />
+              </div>
+              <div className="space-y-1">
+                <label htmlFor="contract-standing-charge" className="text-sm font-medium">Standing charge (p/day)</label>
+                <Input
+                  id="contract-standing-charge"
+                  name="standingCharge"
+                  type="number"
+                  inputMode="decimal"
+                  step="0.001"
+                  min={0}
+                  defaultValue={contract?.standingChargePence ?? ""}
+                  placeholder="e.g. 53.27"
                   className="text-base min-h-[44px]"
                 />
               </div>
@@ -197,9 +212,17 @@ export function ContractSection({ contract }: ContractSectionProps) {
           <div className="flex justify-between">
             <dt className="text-muted-foreground">Unit rate</dt>
             <dd className="font-medium">
-              {parseFloat(contract.unitRatePence).toFixed(2)}p/kWh
+              {parseFloat(contract.unitRatePence).toFixed(3)}p/kWh
             </dd>
           </div>
+          {contract.standingChargePence && (
+            <div className="flex justify-between">
+              <dt className="text-muted-foreground">Standing charge</dt>
+              <dd className="font-medium">
+                {parseFloat(contract.standingChargePence).toFixed(3)}p/day
+              </dd>
+            </div>
+          )}
           <div className="flex justify-between">
             <dt className="text-muted-foreground">Type</dt>
             <dd className="font-medium capitalize">{contract.contractType}</dd>

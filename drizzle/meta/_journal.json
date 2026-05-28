@@ -15,6 +15,13 @@
       "when": 1779965059378,
       "tag": "0001_add_oil_purchase_supplier",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1779993606981,
+      "tag": "0002_electricity_billing_period_standing_charge",
+      "breakpoints": true
     }
   ]
 }

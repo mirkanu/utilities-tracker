@@ -16,15 +16,15 @@ import { BillsSection } from "@/components/electricity/bills-section";
 export default async function ElectricityPage() {
   const [readings, bills, contractRows] = await Promise.all([
     db.select().from(electricityReadings).orderBy(desc(electricityReadings.readingDate)),
-    db.select().from(electricityBills).orderBy(desc(electricityBills.billMonth)),
+    db.select().from(electricityBills).orderBy(desc(electricityBills.periodStart)),
     db.select().from(electricityContracts).where(eq(electricityContracts.isActive, true)).limit(1),
   ]);
   const contract = contractRows[0] ?? null;
   const daysToExpiry = computeDaysToExpiry(contract?.expiryDate);
 
-  // Bills shape for charts (only the three fields charts need)
+  // Bills shape for charts (only the fields charts need)
   const billsForCharts = bills.map((b) => ({
-    billMonth: b.billMonth,
+    periodStart: b.periodStart,
     totalKwh: b.totalKwh,
     totalCostGbp: b.totalCostGbp,
   }));
@@ -38,7 +38,8 @@ export default async function ElectricityPage() {
   }));
   const billsForSection = bills.map((b) => ({
     id: b.id,
-    billMonth: b.billMonth,
+    periodStart: b.periodStart,
+    periodEnd: b.periodEnd,
     totalKwh: b.totalKwh,
     totalCostGbp: b.totalCostGbp,
     notes: b.notes,
@@ -48,6 +49,7 @@ export default async function ElectricityPage() {
         id: contract.id,
         provider: contract.provider,
         unitRatePence: contract.unitRatePence,
+        standingChargePence: contract.standingChargePence,
         contractType: contract.contractType,
         expiryDate: contract.expiryDate,
         notes: contract.notes,
@@ -68,7 +70,11 @@ export default async function ElectricityPage() {
       <CostChart bills={billsForCharts} />
       <ContractSection contract={contractForSection} />
       <ReadingsSection initialReadings={readingsForSection} />
-      <BillsSection initialBills={billsForSection} />
+      <BillsSection
+        initialBills={billsForSection}
+        unitRatePence={contract?.unitRatePence ?? null}
+        standingChargePence={contract?.standingChargePence ?? null}
+      />
     </div>
   );
 }

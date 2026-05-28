@@ -6,6 +6,7 @@ interface OilStatCardProps {
   heightCm: number | null;
   daysRemaining: number | null;
   emptyDate: Date | null;
+  litresRemaining: number | null;
 }
 
 function formatEmptyDate(date: Date): string {
@@ -16,7 +17,7 @@ function formatEmptyDate(date: Date): string {
   });
 }
 
-export function OilStatCard({ heightCm, daysRemaining, emptyDate }: OilStatCardProps) {
+export function OilStatCard({ heightCm, daysRemaining, emptyDate, litresRemaining }: OilStatCardProps) {
   const hasData = heightCm !== null;
   const hasPrediction = daysRemaining !== null;
   const isCritical = hasPrediction && daysRemaining! < 30;
@@ -41,9 +42,13 @@ export function OilStatCard({ heightCm, daysRemaining, emptyDate }: OilStatCardP
         ) : (
           <>
             <p className="mt-1 text-[28px] font-semibold leading-tight">
-              {hasPrediction ? `~${daysRemaining} days` : "Not enough data"}
+              {litresRemaining !== null ? `~${litresRemaining} L` : `${heightCm} cm`}
             </p>
-            <p className="text-sm text-muted-foreground">{heightCm} cm</p>
+            <p className="text-sm text-muted-foreground">
+              {litresRemaining !== null
+                ? `${heightCm} cm` + (hasPrediction ? ` · ~${daysRemaining} days` : " · Not enough data")
+                : (hasPrediction ? `~${daysRemaining} days` : "Not enough data")}
+            </p>
             {emptyDate && (
               <p className="text-sm text-muted-foreground">
                 Empty ~{formatEmptyDate(emptyDate)}

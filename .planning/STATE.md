@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: milestone_complete
-stopped_at: Quick task 260528-eey completed — add supplier/payee field to oil purchases and seed historical purchase data
-last_updated: "2026-05-28T15:03:10.189Z"
+stopped_at: Quick task — electricity standing charge + billing period dates (commit 112bec2)
+last_updated: "2026-05-28T19:00:00.000Z"
 last_activity: 2026-05-28 -- Phase 05 execution started
 progress:
   total_phases: 5
@@ -91,6 +91,9 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 260528-eey | Add supplier/payee field to oil purchases and seed historical purchase data | 2026-05-28 | 85ce924 | [260528-eey-add-supplier-payee-field-to-oil-purchase](./quick/260528-eey-add-supplier-payee-field-to-oil-purchase/) |
+| 260528-b | Oil chart: dots with dashed connecting lines (replace continuous solid line) | 2026-05-28 | 4ab20a1 | — |
+| 260528-c | Add visible field labels to all log popups (oil readings, oil purchases, elec readings, bills, contract) | 2026-05-28 | a618938 | — |
+| 260528-d | Electricity: standing charge (p/day) on contract; billing period start/end dates replacing billing month; auto-calculated cost | 2026-05-28 | 112bec2 | — |
 
 ## Deferred Items
 
@@ -102,6 +105,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-05-28T10:22:45.192Z
-Stopped at: Quick task 260528-eey completed — add supplier/payee field to oil purchases and seed historical purchase data
+Last session: 2026-05-28T19:00:00.000Z
+Stopped at: Quick task 260528-d — electricity standing charge + billing period dates (commit 112bec2)
 Resume file: None

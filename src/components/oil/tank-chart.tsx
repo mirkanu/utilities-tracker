@@ -32,17 +32,19 @@ const chartConfig = {
 // against the SVG left boundary. Recharts hardcodes tspan x, so dx on the
 // outer <text> is ignored — we must override x in a custom renderer.
 function YAxisTick({ x = 0, y = 0, payload }: { x?: number; y?: number; payload?: { value: number } }) {
+  const litres = payload ? cmToLitres(payload.value) : null;
   return (
     <text
       x={x + 20}
       y={y}
-      dy="0.355em"
       textAnchor="end"
-      fontSize={11}
       fill="var(--muted-foreground)"
       className="recharts-text recharts-cartesian-axis-tick-value"
     >
-      {payload?.value}cm
+      <tspan dy="-0.2em" fontSize={11}>{payload?.value}cm</tspan>
+      {litres !== null && (
+        <tspan x={x + 20} dy="1.3em" fontSize={10} opacity={0.7}>~{litres}L</tspan>
+      )}
     </text>
   );
 }

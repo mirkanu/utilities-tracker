@@ -16,6 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 2: Oil Domain** - Tank readings, purchases, history, graph, depletion prediction
 - [ ] **Phase 3: Electricity Domain** - Meter readings, bills, graphs, contract, expiry alert
 - [x] **Phase 4: Dashboard & Polish** - Unified home screen, skeleton loading, mobile QA (completed 2026-05-28)
+- [ ] **Phase 5: Oil Volume Conversion** - Display oil level in litres alongside cm using calibrated cm→L ratio
 
 ## Phase Details
 
@@ -99,6 +100,23 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 - [x] 04-04-PLAN.md — Playwright E2E mobile QA pass at 375px viewport
+
+### Phase 5: Oil Volume Conversion
+**Goal**: Every cm reading is accompanied by an estimated litres value, and the depletion prediction shows litres remaining and litres/day consumption
+**Depends on**: Phase 4
+**Requirements**: OIL-07, OIL-08
+**Success Criteria** (what must be TRUE):
+  1. Every tank height reading in the list and graph shows its litre equivalent (e.g. "27 cm / ~284 L")
+  2. The depletion prediction shows litres remaining and litres consumed per day alongside the existing days-to-empty countdown
+  3. The dashboard Oil stat card shows litres remaining
+  4. Conversion uses calibrated ratio of 10.5 L/cm (derived from refill event analysis); constant lives in a single config location so it can be updated without touching UI code
+**Plans**: 3 plans
+**UI hint**: yes
+
+Plans:
+- [ ] 05-01-PLAN.md — Create oil-config.ts (CM_TO_LITRES_RATIO + cmToLitres) and extend computeDepletion with litresRemaining/litresPerDay
+- [ ] 05-02-PLAN.md — Wire litres through /oil page: reading rows, chart tooltip, depletion card
+- [ ] 05-03-PLAN.md — Update dashboard OilStatCard to show litres remaining as primary number
 
 ## Progress
 

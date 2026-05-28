@@ -21,6 +21,8 @@
 - [ ] **OIL-04**: User can view history of all oil purchases (newest first)
 - [ ] **OIL-05**: User can see a graph of tank height over time, with refill events marked
 - [ ] **OIL-06**: User can see an estimated date when the tank will run empty (based on consumption rate since last refill)
+- [ ] **OIL-07**: Every tank reading displays its litre equivalent alongside the cm value (e.g. "27 cm / ~284 L"), using a calibrated cm→L ratio
+- [ ] **OIL-08**: The depletion prediction and dashboard stat card show litres remaining and litres/day consumption rate
 
 ### Electricity Tracking
 
@@ -94,6 +96,8 @@ Updated during roadmap creation.
 | ELEC-07 | Phase 3 | Pending |
 | ELEC-08 | Phase 3 | Pending |
 | DASH-01 | Phase 4 | Complete |
+| OIL-07 | Phase 5 | Pending |
+| OIL-08 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 20 total

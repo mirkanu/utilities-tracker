@@ -18,6 +18,8 @@ See at a glance how much oil and electricity you're using, know when the oil wil
 
 **Electricity (Phase 3):** Meter readings, monthly bills, usage/cost BarCharts, contract upsert, contract expiry banner (3 tiers: amber 31–90d, red ≤30d, hidden when rolling) — all 8 ELEC requirements verified E2E 2026-05-27.
 
+**Dashboard Polish (Phase 4):** Real dashboard home at `/` — parallel data fetch, OilStatCard + ElectricityStatCard in grid-cols-2, ContractExpiryBanner, 3-tab bottom nav with exclusive active-state — all DASH-01 criteria verified E2E 2026-05-28.
+
 ### Active
 
 **Heating Oil**

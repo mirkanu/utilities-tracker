@@ -85,6 +85,12 @@ None yet.
 - Brute-force protection: Using Cloudflare Access IP restriction (no app code needed) — resolved in planning.
 - UTILITIES_SESSION_SECRET: Plan 01-05 generates this automatically via `openssl rand -base64 32` during deploy task.
 
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260528-eey | Add supplier/payee field to oil purchases and seed historical purchase data | 2026-05-28 | 85ce924 | [260528-eey-add-supplier-payee-field-to-oil-purchase](./quick/260528-eey-add-supplier-payee-field-to-oil-purchase/) |
+
 ## Deferred Items
 
 Items acknowledged and carried forward from previous milestone close:
@@ -95,6 +101,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-05-28T08:39:34.093Z
-Stopped at: Phase 4 UI-SPEC approved
+Last session: 2026-05-28T10:22:45.192Z
+Stopped at: Quick task 260528-eey completed — add supplier/payee field to oil purchases and seed historical purchase data
 Resume file: None

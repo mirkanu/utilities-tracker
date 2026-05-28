@@ -32,7 +32,7 @@ export default async function HomePage() {
       .limit(1),
   ]);
 
-  const { daysRemaining, emptyDate } = computeDepletion(
+  const { daysRemaining, emptyDate, litresRemaining } = computeDepletion(
     readings.map((r) => ({ readingDate: r.readingDate, heightCm: r.heightCm })),
     purchases.map((p) => ({ purchaseDate: p.purchaseDate }))
   );
@@ -58,6 +58,7 @@ export default async function HomePage() {
           heightCm={readings[0]?.heightCm ?? null}
           daysRemaining={daysRemaining}
           emptyDate={emptyDate}
+          litresRemaining={litresRemaining}
         />
         <ElectricityStatCard
           bill={

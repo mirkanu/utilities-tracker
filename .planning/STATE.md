@@ -4,8 +4,8 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: Quick task 260528-eey completed — add supplier/payee field to oil purchases and seed historical purchase data
-last_updated: "2026-05-28T14:37:37.681Z"
-last_activity: 2026-05-28 -- Phase 05 planning complete
+last_updated: "2026-05-28T15:03:10.189Z"
+last_activity: 2026-05-28 -- Phase 05 execution started
 progress:
   total_phases: 5
   completed_phases: 4
@@ -21,15 +21,15 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-09)
 
 **Core value:** See at a glance how much oil and electricity you're using, know when the oil will run out, and never miss an electricity contract renewal — all from your phone.
-**Current focus:** Phase 04 — dashboard-polish
+**Current focus:** Phase 05 — oil-volume-conversion
 
 ## Current Position
 
-Phase: 04
-Plan: Not started
+Phase: 05 (oil-volume-conversion) — EXECUTING
+Plan: 1 of 3
 Next: Phase 02 (oil-domain)
-Status: Ready to execute
-Last activity: 2026-05-28 -- Phase 05 planning complete
+Status: Executing Phase 05
+Last activity: 2026-05-28 -- Phase 05 execution started
 
 Progress: [██████████] 100%
 

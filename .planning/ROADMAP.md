@@ -114,7 +114,7 @@ Plans:
 **UI hint**: yes
 
 Plans:
-- [ ] 05-01-PLAN.md — Create oil-config.ts (CM_TO_LITRES_RATIO + cmToLitres) and extend computeDepletion with litresRemaining/litresPerDay
+- [x] 05-01-PLAN.md — Create oil-config.ts (CM_TO_LITRES_RATIO + cmToLitres) and extend computeDepletion with litresRemaining/litresPerDay
 - [ ] 05-02-PLAN.md — Wire litres through /oil page: reading rows, chart tooltip, depletion card
 - [ ] 05-03-PLAN.md — Update dashboard OilStatCard to show litres remaining as primary number
 

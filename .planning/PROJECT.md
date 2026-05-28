@@ -90,4 +90,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-27 — Phase 3 complete (electricity domain)*
+*Last updated: 2026-05-28 — Phase 5 complete (oil volume conversion — cm→L throughout UI)*

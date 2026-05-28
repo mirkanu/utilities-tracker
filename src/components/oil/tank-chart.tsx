@@ -133,12 +133,13 @@ export function TankChart({ readings, purchases }: TankChartProps) {
           />
         ))}
         <Line
-          type="monotone"
+          type="linear"
           dataKey="heightCm"
           stroke="var(--color-heightCm)"
-          strokeWidth={2}
-          dot={false}
-          activeDot={{ r: 4 }}
+          strokeWidth={1.5}
+          strokeDasharray="5 4"
+          dot={{ r: 4, fill: "var(--color-heightCm)", strokeWidth: 0 }}
+          activeDot={{ r: 5 }}
         />
       </LineChart>
     </ChartContainer>

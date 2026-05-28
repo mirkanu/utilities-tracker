@@ -13,6 +13,9 @@
 # testing
 /coverage
 
+# E2E test screenshot artifacts
+tests/e2e/artifacts/
+
 # next.js
 /.next/
 /out/

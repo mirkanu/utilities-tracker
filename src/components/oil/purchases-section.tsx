@@ -44,6 +44,7 @@ interface Purchase {
   purchaseDate: string;
   litres: string;
   totalCostGbp: string;
+  supplier: string | null;
 }
 
 function SubmitButton() {
@@ -60,7 +61,7 @@ function SubmitButton() {
   );
 }
 
-export function PurchasesSection({ initialPurchases }: { initialPurchases: Purchase[] }) {
+export function PurchasesSection({ initialPurchases, lastSupplier = "" }: { initialPurchases: Purchase[]; lastSupplier?: string }) {
   const [shown, setShown] = useState(PAGE_SIZE);
   const [deletedIds, setDeletedIds] = useState<Set<number>>(new Set());
   const [deleteTarget, setDeleteTarget] = useState<Purchase | null>(null);
@@ -166,6 +167,16 @@ export function PurchasesSection({ initialPurchases }: { initialPurchases: Purch
                   aria-label="Purchase date"
                 />
               </div>
+              <div className="space-y-1">
+                <Input
+                  type="text"
+                  name="supplier"
+                  placeholder="e.g. J&R Fuels"
+                  defaultValue={lastSupplier}
+                  className="text-base min-h-[44px]"
+                  aria-label="Supplier"
+                />
+              </div>
               {state?.error && (
                 <div aria-live="polite" aria-atomic="true">
                   <p className="text-sm text-destructive">{state.error}</p>
@@ -205,7 +216,11 @@ export function PurchasesSection({ initialPurchases }: { initialPurchases: Purch
                     </p>
                     <p className="text-base font-semibold">{formatCost(p.totalCostGbp)}</p>
                   </div>
-                  {ppl && <p className="text-sm text-muted-foreground">{ppl}</p>}
+                  {(p.supplier || ppl) && (
+                    <p className="text-sm text-muted-foreground">
+                      {[p.supplier, ppl].filter(Boolean).join(" · ")}
+                    </p>
+                  )}
                 </div>
                 <button
                   onClick={() => setDeleteTarget(p)}

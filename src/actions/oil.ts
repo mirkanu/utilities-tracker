@@ -42,6 +42,8 @@ export async function addOilPurchase(
   const litresRaw = formData.get("litres") as string;
   const costRaw = formData.get("cost") as string;
   const dateRaw = formData.get("date") as string;
+  const supplierRaw = (formData.get("supplier") as string | null)?.trim();
+  const supplier = supplierRaw && supplierRaw.length > 0 ? supplierRaw : null;
 
   if (!litresRaw || parseFloat(litresRaw) <= 0) {
     return { error: "Please enter the number of litres delivered." };
@@ -57,6 +59,7 @@ export async function addOilPurchase(
     purchaseDate: dateRaw,         // DATE column — plain "YYYY-MM-DD" string
     litres: litresRaw,             // numeric column accepts string — postgres.js coerces
     totalCostGbp: costRaw,
+    supplier,
     notes: (formData.get("notes") as string) || null,
   });
 

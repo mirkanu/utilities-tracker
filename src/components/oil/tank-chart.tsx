@@ -82,12 +82,12 @@ export function TankChart({ readings, purchases }: TankChartProps) {
           axisLine={false}
           tick={{ fontSize: 11 }}
           ticks={ticks}
-          tickFormatter={(value: string) =>
-            new Date(value + "T12:00:00").toLocaleDateString("en-GB", {
-              day: "numeric",
-              month: "short",
-            })
-          }
+          tickFormatter={(value: string) => {
+            const d = new Date(value + "T12:00:00");
+            const mon = d.toLocaleDateString("en-GB", { month: "short" });
+            const yr = String(d.getFullYear()).slice(-2);
+            return `${mon}-${yr}`;
+          }}
         />
         <YAxis
           tickLine={false}

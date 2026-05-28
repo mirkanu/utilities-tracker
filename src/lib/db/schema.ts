@@ -21,6 +21,7 @@ export const oilPurchases = pgTable("oil_purchases", {
   purchaseDate: date("purchase_date").notNull(), // DATE not TIMESTAMP
   litres: numeric("litres", { precision: 8, scale: 2 }).notNull(),
   totalCostGbp: numeric("total_cost_gbp", { precision: 8, scale: 2 }).notNull(),
+  supplier: text("supplier"),
   notes: text("notes"),
 });
 

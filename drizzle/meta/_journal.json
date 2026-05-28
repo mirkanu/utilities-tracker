@@ -8,6 +8,13 @@
       "when": 1778345516420,
       "tag": "0000_far_electro",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1748390400000,
+      "tag": "0001_add_oil_purchase_supplier",
+      "breakpoints": true
     }
   ]
 }

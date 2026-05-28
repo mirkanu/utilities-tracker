@@ -6,7 +6,8 @@
 const { chromium } = require('/usr/lib/node_modules/playwright');
 
 const BASE_URL = process.env.E2E_BASE_URL || 'https://utilities.gsdlabs.dev';
-const PASSWORD = process.env.UTILITIES_AUTH_PASSWORD;
+// UTILITIES_AUTH_PASSWORD is a CI override; UTILITIES_PASSWORD is the production name.
+const PASSWORD = process.env.UTILITIES_AUTH_PASSWORD || process.env.UTILITIES_PASSWORD;
 
 if (!PASSWORD) {
   console.error('UTILITIES_AUTH_PASSWORD not set — source /home/services/.env.production before running');
@@ -133,12 +134,18 @@ function assert(cond, msg) {
     await page.goto(BASE_URL + intermediary, { waitUntil: 'networkidle' });
 
     // Throttle the target document response by ~1500ms so the skeleton is on screen
-    // long enough to assert against. Match the bare route and any RSC payload requests.
+    // long enough to assert against. Use a handler flag so we only delay once and
+    // avoid "route already handled" errors on subsequent requests (e.g. RSC payloads).
     const targetPath = route;
-    await page.route(BASE_URL + targetPath + '**', async (r) => {
-      await new Promise((res) => setTimeout(res, 1500));
+    let delayApplied = false;
+    const routeHandler = async (r) => {
+      if (!delayApplied) {
+        delayApplied = true;
+        await new Promise((res) => setTimeout(res, 1500));
+      }
       await r.continue();
-    });
+    };
+    await page.route(BASE_URL + targetPath + '**', routeHandler);
 
     // waitUntil:'commit' resolves as soon as the navigation response headers arrive —
     // exactly when Next.js App Router has the loading.tsx skeleton on screen.
@@ -152,8 +159,8 @@ function assert(cond, msg) {
       `Skeleton (.animate-pulse) visible on navigation to ${route} (got ${skeletonCount} elements)`
     );
 
-    // Clean up: stop throttling and let the page settle before the next iteration.
-    await page.unroute(BASE_URL + targetPath + '**');
+    // Clean up: remove the handler and wait for page to fully settle.
+    await page.unroute(BASE_URL + targetPath + '**', routeHandler);
     await page.waitForLoadState('networkidle');
   }
 

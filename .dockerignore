@@ -1,0 +1,14 @@
+# Exclude local build output — Docker build runs its own `npm run build`
+.next/
+
+# Exclude local dev/test artifacts
+node_modules/
+tests/e2e/artifacts/
+
+# Exclude planning and docs
+.planning/
+*.md
+!README.md
+
+# Exclude git history
+.git/

@@ -53,8 +53,8 @@ Plans:
 **UI hint**: yes
 
 Plans:
-- [ ] 04-01-PLAN.md — Extract computeDaysToExpiry util + create OilStatCard and ElectricityStatCard components
-- [ ] 04-02-PLAN.md — Update BottomNav: add Home tab and fix active-state exclusivity
+- [x] 04-01-PLAN.md — Extract computeDaysToExpiry util + create OilStatCard and ElectricityStatCard components
+- [x] 04-02-PLAN.md — Update BottomNav: add Home tab and fix active-state exclusivity
 - [ ] 04-03-PLAN.md — Dashboard page.tsx (Server Component) and loading.tsx skeleton
 - [ ] 04-04-PLAN.md — Playwright E2E mobile QA pass at 375px viewport
 
@@ -91,8 +91,8 @@ Plans:
 
 Plans:
 **Wave 1**
-- [ ] 04-01-PLAN.md — Extract computeDaysToExpiry util + create OilStatCard and ElectricityStatCard components
-- [ ] 04-02-PLAN.md — Update BottomNav: add Home tab and fix active-state exclusivity
+- [x] 04-01-PLAN.md — Extract computeDaysToExpiry util + create OilStatCard and ElectricityStatCard components
+- [x] 04-02-PLAN.md — Update BottomNav: add Home tab and fix active-state exclusivity
 
 **Wave 2** *(blocked on Wave 1 completion)*
 - [ ] 04-03-PLAN.md — Dashboard page.tsx (Server Component) and loading.tsx skeleton

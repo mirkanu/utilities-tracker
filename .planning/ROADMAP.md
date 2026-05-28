@@ -98,7 +98,7 @@ Plans:
 - [x] 04-03-PLAN.md — Dashboard page.tsx (Server Component) and loading.tsx skeleton
 
 **Wave 3** *(blocked on Wave 2 completion)*
-- [ ] 04-04-PLAN.md — Playwright E2E mobile QA pass at 375px viewport
+- [x] 04-04-PLAN.md — Playwright E2E mobile QA pass at 375px viewport
 
 ## Progress
 

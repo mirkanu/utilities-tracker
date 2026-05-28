@@ -15,7 +15,7 @@ export default async function OilPage() {
   ]);
 
   // Compute depletion server-side (pure function — no extra DB call)
-  const { daysRemaining, emptyDate } = computeDepletion(
+  const { daysRemaining, emptyDate, litresRemaining, litresPerDay } = computeDepletion(
     readings.map((r) => ({ readingDate: r.readingDate, heightCm: r.heightCm })),
     purchases.map((p) => ({ purchaseDate: p.purchaseDate }))
   );
@@ -28,7 +28,12 @@ export default async function OilPage() {
       </div>
 
       {/* Depletion prediction card */}
-      <DepletionCard daysRemaining={daysRemaining} emptyDate={emptyDate} />
+      <DepletionCard
+        daysRemaining={daysRemaining}
+        emptyDate={emptyDate}
+        litresRemaining={litresRemaining}
+        litresPerDay={litresPerDay}
+      />
 
       {/* Tank level chart — null when no readings (component handles empty gracefully) */}
       <TankChart

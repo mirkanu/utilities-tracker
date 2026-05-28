@@ -5,6 +5,8 @@ import { Droplets, Info } from "lucide-react";
 interface DepletionCardProps {
   daysRemaining: number | null;
   emptyDate: Date | null;
+  litresRemaining: number | null;
+  litresPerDay: number | null;
 }
 
 // Format Date as "25 Jun 2026" — append T12:00:00 to avoid UTC midnight BST offset bug
@@ -16,7 +18,7 @@ function formatEmptyDate(date: Date): string {
   });
 }
 
-export function DepletionCard({ daysRemaining, emptyDate }: DepletionCardProps) {
+export function DepletionCard({ daysRemaining, emptyDate, litresRemaining, litresPerDay }: DepletionCardProps) {
   const isInsufficient = daysRemaining === null;
   const isCritical = daysRemaining !== null && daysRemaining < 30;
   const isWarning = daysRemaining !== null && daysRemaining >= 30 && daysRemaining < 60;
@@ -51,6 +53,11 @@ export function DepletionCard({ daysRemaining, emptyDate }: DepletionCardProps) 
             <p className="mt-1 text-[28px] font-semibold leading-tight">
               ~{daysRemaining} days
             </p>
+            {litresRemaining !== null && litresPerDay !== null && (
+              <p className="text-sm text-muted-foreground">
+                ~{litresRemaining} L remaining · {litresPerDay} L/day
+              </p>
+            )}
             {emptyDate && (
               <p className="text-sm text-muted-foreground">
                 Empty around {formatEmptyDate(emptyDate)}

@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation** - Auth, database schema, Docker deploy, mobile shell, navigation
 - [ ] **Phase 2: Oil Domain** - Tank readings, purchases, history, graph, depletion prediction
 - [ ] **Phase 3: Electricity Domain** - Meter readings, bills, graphs, contract, expiry alert
-- [ ] **Phase 4: Dashboard & Polish** - Unified home screen, skeleton loading, mobile QA
+- [x] **Phase 4: Dashboard & Polish** - Unified home screen, skeleton loading, mobile QA (completed 2026-05-28)
 
 ## Phase Details
 
@@ -56,7 +56,7 @@ Plans:
 - [x] 04-01-PLAN.md — Extract computeDaysToExpiry util + create OilStatCard and ElectricityStatCard components
 - [x] 04-02-PLAN.md — Update BottomNav: add Home tab and fix active-state exclusivity
 - [x] 04-03-PLAN.md — Dashboard page.tsx (Server Component) and loading.tsx skeleton
-- [ ] 04-04-PLAN.md — Playwright E2E mobile QA pass at 375px viewport
+- [x] 04-04-PLAN.md — Playwright E2E mobile QA pass at 375px viewport
 
 ### Phase 3: Electricity Domain
 **Goal**: User can log electricity usage and bills, view consumption graphs, and track contract expiry
@@ -95,7 +95,7 @@ Plans:
 - [x] 04-02-PLAN.md — Update BottomNav: add Home tab and fix active-state exclusivity
 
 **Wave 2** *(blocked on Wave 1 completion)*
-- [ ] 04-03-PLAN.md — Dashboard page.tsx (Server Component) and loading.tsx skeleton
+- [x] 04-03-PLAN.md — Dashboard page.tsx (Server Component) and loading.tsx skeleton
 
 **Wave 3** *(blocked on Wave 2 completion)*
 - [ ] 04-04-PLAN.md — Playwright E2E mobile QA pass at 375px viewport
@@ -110,4 +110,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Foundation | 6/6 | Complete | 2026-05-09 |
 | 2. Oil Domain | 0/? | Not started | - |
 | 3. Electricity Domain | 4/5 | In Progress|  |
-| 4. Dashboard & Polish | 0/? | Not started | - |
+| 4. Dashboard & Polish | 4/4 | Complete   | 2026-05-28 |

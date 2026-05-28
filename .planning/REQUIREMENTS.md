@@ -35,7 +35,7 @@
 
 ### Dashboard
 
-- [ ] **DASH-01**: User sees a home screen with key stats for both utilities (current oil level cm, estimated days/date to empty, last electricity bill cost & kWh, contract expiry countdown)
+- [x] **DASH-01**: User sees a home screen with key stats for both utilities (current oil level cm, estimated days/date to empty, last electricity bill cost & kWh, contract expiry countdown)
 
 ## v2 Requirements
 
@@ -93,7 +93,7 @@ Updated during roadmap creation.
 | ELEC-06 | Phase 3 | Pending |
 | ELEC-07 | Phase 3 | Pending |
 | ELEC-08 | Phase 3 | Pending |
-| DASH-01 | Phase 4 | Pending |
+| DASH-01 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 20 total

@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.0
-milestone_name: milestone
-status: milestone_complete
-stopped_at: Quick task — electricity standing charge + billing period dates (commit 112bec2)
-last_updated: "2026-05-28T19:00:00.000Z"
-last_activity: 2026-05-28 -- Phase 05 execution started
+milestone_name: MVP
+status: milestone_archived
+stopped_at: v1.0 milestone archived 2026-05-28
+last_updated: "2026-05-28T20:00:00.000Z"
+last_activity: 2026-05-28 -- v1.0 milestone archived
 progress:
   total_phases: 5
   completed_phases: 5
   total_plans: 22
-  completed_plans: 19
+  completed_plans: 22
   percent: 100
 ---
 
@@ -18,10 +18,10 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-05-09)
+See: .planning/PROJECT.md (updated 2026-05-28 after v1.0 milestone)
 
 **Core value:** See at a glance how much oil and electricity you're using, know when the oil will run out, and never miss an electricity contract renewal — all from your phone.
-**Current focus:** Phase 05 — oil-volume-conversion
+**Current focus:** Planning next milestone
 
 ## Current Position
 

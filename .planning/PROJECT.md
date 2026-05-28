@@ -2,7 +2,9 @@
 
 ## What This Is
 
-A personal, mobile-first web app for tracking home energy usage — heating oil and electricity. The owner manually logs tank readings, meter readings, purchases, and bills; the app visualises consumption over time, predicts oil depletion, and alerts on contract expiry.
+A personal, mobile-first web app for tracking home energy usage — heating oil and electricity. The owner manually logs tank readings, meter readings, purchases, and bills; the app visualises consumption over time, predicts oil depletion in cm and litres, and alerts on contract expiry.
+
+Live at: https://utilities.gsdlabs.dev/
 
 ## Core Value
 
@@ -12,49 +14,49 @@ See at a glance how much oil and electricity you're using, know when the oil wil
 
 ### Validated
 
-**Foundation (Phase 1):** Auth, DB schema, Docker deploy, Cloudflare Tunnel — all live at https://utilities.gsdlabs.dev/
-
-**Heating Oil (Phase 2):** Tank readings, oil purchases, depletion chart, segment-based depletion prediction — verified E2E.
-
-**Electricity (Phase 3):** Meter readings, monthly bills, usage/cost BarCharts, contract upsert, contract expiry banner (3 tiers: amber 31–90d, red ≤30d, hidden when rolling) — all 8 ELEC requirements verified E2E 2026-05-27.
-
-**Dashboard Polish (Phase 4):** Real dashboard home at `/` — parallel data fetch, OilStatCard + ElectricityStatCard in grid-cols-2, ContractExpiryBanner, 3-tab bottom nav with exclusive active-state — all DASH-01 criteria verified E2E 2026-05-28.
+- ✓ Password-protected login (single user) — v1.0 (Phase 1)
+- ✓ Mobile-first responsive UI with skeleton loading states — v1.0 (Phases 1+4)
+- ✓ Hosted on Hetzner VPS via Cloudflare Tunnel — v1.0 (Phase 1)
+- ✓ Navigate between Oil, Electricity, and Home sections — v1.0 (Phase 1+4, 3-tab BottomNav)
+- ✓ Log oil tank height reading (cm + date) — v1.0 (Phase 2)
+- ✓ Log oil purchase (date, litres, cost, supplier) — v1.0 (Phase 2 + quick task)
+- ✓ Graph tank height over time with refill markers — v1.0 (Phase 2, TankChart dashed line)
+- ✓ Segment-based oil depletion prediction — v1.0 (Phase 2)
+- ✓ Oil readings show litre equivalent (10.5 L/cm) — v1.0 (Phase 5)
+- ✓ Depletion card and dashboard show litres remaining + L/day rate — v1.0 (Phase 5)
+- ✓ Log electricity meter reading (kWh + date) — v1.0 (Phase 3)
+- ✓ Log electricity bill (billing period, cost, kWh) — v1.0 (Phase 3 + quick task)
+- ✓ Graph electricity usage (kWh) and cost (£) over time — v1.0 (Phase 3)
+- ✓ Manage electricity contract (provider, unit rate, standing charge, type, expiry) — v1.0 (Phase 3 + quick task)
+- ✓ In-app contract expiry warning (3 tiers: amber 31–90d, red ≤30d) — v1.0 (Phase 3)
+- ✓ Unified dashboard: oil + electricity stats at a glance — v1.0 (Phase 4)
 
 ### Active
 
-**Heating Oil**
-- [x] Log oil tank height reading in cm (dated, every 1–4 weeks)
-- [x] Log oil purchases: date, total liters, total cost
-- [x] Graph tank height over time (cm)
-- [x] Predict estimated date tank will run empty (linear depletion rate)
-
-**Electricity**
-- [x] Log monthly electricity meter reading (kWh, date)
-- [x] Log monthly electricity bill: month, total cost, total kWh consumed
-- [x] Graph electricity usage and cost over time (monthly)
-- [x] Track electricity contract: provider, tariff/unit rate, contract type (fixed vs variable), expiry date
-- [x] Alert (in-app) when electricity contract is expiring (configurable lead time, e.g. 30/60/90 days)
-
-**Foundation**
-- [ ] Password-protected login (single user)
-- [ ] Mobile-first responsive UI
-- [ ] Hosted on personal VPS (Hetzner), accessible via Cloudflare Tunnel
+*(Next milestone requirements go here — start with `/gsd-new-milestone`)*
 
 ### Out of Scope
 
 - Multi-user / household sharing — only one user needed; avoids auth complexity
 - Automated bill ingestion (email/photo parsing) — v2; v1 is manual entry only
-- Heating oil → liters conversion — v2; tank dimensions/product code not yet known; v1 tracks cm only
-- Temperature correlation and trend analysis — v2 future feature; Northern Ireland (Broughshane) weather data via Met Office or Open-Meteo API
-- Electricity market comparison / deal switching — out of scope entirely; not the goal
+- Full tank dimension input for volume conversion — v2; v1 uses calibrated 10.5 L/cm constant; update the constant in oil-config.ts when tank is measured
+- Temperature correlation and trend analysis — v2 future; Northern Ireland (Broughshane) weather via Open-Meteo
+- Electricity market comparison / deal switching — out of scope entirely
+- Push notifications — in-app alert sufficient for contract expiry
 
 ## Context
 
-- **Heating oil** is measured by reading the height of oil in a cylindrical/rectangular tank in cm. The owner will obtain tank dimensions or product code to enable volume conversion in v2.
-- **Electricity** is read manually once a month from the meter; a bill also arrives monthly with cost and kWh.
-- **Location**: Broughshane, Northern Ireland — relevant for future temperature correlation (Met Office historical data or Open-Meteo).
-- **VPS infrastructure**: Hetzner VPS running Docker Compose, secrets in `/home/services/.env.production`, Cloudflare Tunnel for public access. Stack consistent with other projects on this server (Next.js + PostgreSQL typical pattern).
-- **Mobile-first**: Primary device is phone; desktop is secondary.
+**Shipped v1.0** — 2026-05-28. 5 phases, 22 plans, ~4,050 LOC TypeScript/TSX.
+
+**Stack:** Next.js 15 (App Router, standalone output), Drizzle ORM + postgres.js, iron-session auth, Recharts via shadcn ChartContainer, shadcn/ui v4 + Tailwind v4, Docker Compose on Hetzner VPS, Cloudflare Tunnel.
+
+**Heating oil** is measured in cm (tank height). Calibrated conversion: 10.5 L/cm — derived from refill event analysis. Constant lives in `src/lib/oil-config.ts`.
+
+**Electricity** is read manually once a month from the meter; a bill arrives monthly with cost, kWh, and billing period dates. Contract has standing charge (p/day) + unit rate.
+
+**Location**: Broughshane, Northern Ireland — relevant for future temperature correlation.
+
+**Mobile-first**: Primary device is phone; 375px QA verified in Phase 4.
 
 ## Constraints
 
@@ -62,26 +64,34 @@ See at a glance how much oil and electricity you're using, know when the oil wil
 - **Auth**: Single-user password login; no need for OAuth or multi-user sessions
 - **Data entry**: All v1 data is manually entered by the owner; no external API dependencies in v1
 - **Hosting**: Cloudflare Tunnel ingress required; add rule to `/home/services/hetzner-vps/config.yml`
+- **Dates**: DATE columns only (never TIMESTAMP); TZ=Europe/London in Docker Compose
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Track oil in cm only (v1) | Tank dimensions unknown; conversion formula to come when owner measures | — Pending |
-| Single-user with password auth | Only one user; keeps auth simple and avoids sessions complexity | — Pending |
-| Manual entry for bills (v1) | Realistic for monthly cadence; email/photo parsing deferred to v2 | — Pending |
-| Mobile-first layout | Primary use case is checking/logging from phone | — Pending |
+| DATE columns only (not TIMESTAMP) | No TZ issues for daily readings | ✓ Good — no BST problems |
+| TZ=Europe/London in Docker Compose | Northern Ireland observes BST | ✓ Good — BST handled correctly |
+| iron-session for auth | No session table; simple encrypted cookie | ✓ Good |
+| Segment-based oil depletion | Naive all-time slope breaks on refill events | ✓ Good — refill events handled correctly |
+| Require 2+ readings before showing depletion | Avoid misleading 1-point prediction | ✓ Good |
+| Separate meter readings + bills tables | No forced reconciliation between meter and bill | ✓ Good |
+| 10.5 L/cm calibration constant in oil-config.ts | Single source, easily updated when tank measured | ✓ Good — constant updated without touching UI |
+| Recharts via shadcn ChartContainer | Consistent theming with design system | ✓ Good |
+| Next.js 15 + shadcn v4 + Tailwind v4 | Cutting-edge stack; tw-animate-css (not tailwindcss-animate) | ✓ Good |
+| Dates appended with "T12:00:00" before Recharts | BST midnight offset shifts dates by -1d otherwise | ✓ Good |
+| postgres.js singleton (max: 5 connections) | Prevent pool exhaustion in serverless-ish Next.js | ✓ Good |
+| CookieStore adapter for iron-session v8 middleware | Middleware cookies are read-only; adapter wraps them | ✓ Good |
+| Billing period start/end dates (not billing month) | Accurately represents period covered by bill | ✓ Good |
+| Standing charge (p/day) on electricity contract | Real-world contract has standing charge + unit rate | ✓ Good |
 
 ## Evolution
-
-This document evolves at phase transitions and milestone boundaries.
 
 **After each phase transition** (via `/gsd-transition`):
 1. Requirements invalidated? → Move to Out of Scope with reason
 2. Requirements validated? → Move to Validated with phase reference
 3. New requirements emerged? → Add to Active
 4. Decisions to log? → Add to Key Decisions
-5. "What This Is" still accurate? → Update if drifted
 
 **After each milestone** (via `/gsd-complete-milestone`):
 1. Full review of all sections
@@ -90,4 +100,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-28 — Phase 5 complete (oil volume conversion — cm→L throughout UI)*
+*Last updated: 2026-05-28 after v1.0 milestone*

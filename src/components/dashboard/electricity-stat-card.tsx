@@ -26,6 +26,7 @@ export function ElectricityStatCard({
   bill,
   daysToExpiry,
   expiryDate,
+  provider,
 }: ElectricityStatCardProps) {
   // 4-tier colour band, per UI-SPEC Color table for electricity:
   //   <= 0 or <= 30 days       -> destructive (red)
@@ -63,14 +64,14 @@ export function ElectricityStatCard({
             <p className="mt-1 text-[28px] font-semibold leading-tight">
               £{costNum!.toFixed(2)}
             </p>
-            <p className="text-sm text-muted-foreground">{kwhNum} kWh</p>
+            <p className="text-sm text-muted-foreground">{kwhNum !== null ? kwhNum.toFixed(0) : '—'} kWh</p>
           </>
         )}
         {hasExpiry && (
           <p className="text-sm text-muted-foreground">
             {isExpired
               ? "Contract expired"
-              : `Contract: ${daysToExpiry} days${expiryDate ? ` (${formatExpiryDate(expiryDate)})` : ""}`}
+              : `${provider ? provider + " — " : ""}Contract: ${daysToExpiry} days${expiryDate ? ` (${formatExpiryDate(expiryDate)})` : ""}`}
           </p>
         )}
       </CardContent>

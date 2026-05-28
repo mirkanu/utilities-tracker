@@ -55,7 +55,9 @@ export default async function OilPage() {
           purchaseDate: p.purchaseDate,
           litres: p.litres,
           totalCostGbp: p.totalCostGbp,
+          supplier: p.supplier ?? null,
         }))}
+        lastSupplier={purchases.find((p) => p.supplier)?.supplier ?? ""}
       />
     </div>
   );

@@ -5,20 +5,13 @@ import {
   electricityContracts,
 } from "@/lib/db/schema";
 import { desc, eq } from "drizzle-orm";
+import { computeDaysToExpiry } from "@/lib/electricity-utils";
 import { ContractExpiryBanner } from "@/components/electricity/contract-expiry-banner";
 import { UsageChart } from "@/components/electricity/usage-chart";
 import { CostChart } from "@/components/electricity/cost-chart";
 import { ContractSection } from "@/components/electricity/contract-section";
 import { ReadingsSection } from "@/components/electricity/readings-section";
 import { BillsSection } from "@/components/electricity/bills-section";
-
-function computeDaysToExpiry(expiryDate: string | null | undefined): number | null {
-  if (!expiryDate) return null;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const expiry = new Date(expiryDate + "T12:00:00");
-  return Math.ceil((expiry.getTime() - today.getTime()) / 86_400_000);
-}
 
 export default async function ElectricityPage() {
   const [readings, bills, contractRows] = await Promise.all([

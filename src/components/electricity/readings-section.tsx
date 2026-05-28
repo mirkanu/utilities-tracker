@@ -115,7 +115,9 @@ export function ReadingsSection({ initialReadings }: { initialReadings: Reading[
             </SheetHeader>
             <form key={formKey} action={formAction} className="space-y-4 px-4 pb-6 pt-4">
               <div className="space-y-1">
+                <label htmlFor="elec-reading-kwh" className="text-sm font-medium">Meter reading (kWh)</label>
                 <Input
+                  id="elec-reading-kwh"
                   type="number"
                   name="kwh"
                   placeholder="e.g. 42350"
@@ -123,25 +125,26 @@ export function ReadingsSection({ initialReadings }: { initialReadings: Reading[
                   step="1"
                   inputMode="numeric"
                   className="text-base min-h-[44px]"
-                  aria-label="Meter reading (kWh)"
                 />
               </div>
               <div className="space-y-1">
+                <label htmlFor="elec-reading-date" className="text-sm font-medium">Date</label>
                 <Input
+                  id="elec-reading-date"
                   type="date"
                   name="date"
                   defaultValue={new Date().toLocaleDateString("en-CA")}
                   className="text-base min-h-[44px]"
-                  aria-label="Reading date"
                 />
               </div>
               <div className="space-y-1">
+                <label htmlFor="elec-reading-notes" className="text-sm font-medium">Notes (optional)</label>
                 <Input
+                  id="elec-reading-notes"
                   type="text"
                   name="notes"
                   placeholder="e.g. after solar panel install"
                   className="text-base min-h-[44px]"
-                  aria-label="Notes (optional)"
                 />
               </div>
               {state?.error && (

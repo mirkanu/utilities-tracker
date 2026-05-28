@@ -115,7 +115,9 @@ export function ReadingsSection({ initialReadings }: { initialReadings: Reading[
             </SheetHeader>
             <form key={formKey} action={formAction} className="space-y-4 px-4 pb-6 pt-4">
               <div className="space-y-1">
+                <label htmlFor="oil-reading-height" className="text-sm font-medium">Height (cm)</label>
                 <Input
+                  id="oil-reading-height"
                   type="number"
                   name="height"
                   placeholder="e.g. 87"
@@ -123,16 +125,16 @@ export function ReadingsSection({ initialReadings }: { initialReadings: Reading[
                   max={999}
                   inputMode="numeric"
                   className="text-base min-h-[44px]"
-                  aria-label="Height in cm"
                 />
               </div>
               <div className="space-y-1">
+                <label htmlFor="oil-reading-date" className="text-sm font-medium">Date</label>
                 <Input
+                  id="oil-reading-date"
                   type="date"
                   name="date"
                   defaultValue={new Date().toISOString().split("T")[0]}
                   className="text-base min-h-[44px]"
-                  aria-label="Reading date"
                 />
               </div>
               {state?.error && (

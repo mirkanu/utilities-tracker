@@ -115,15 +115,18 @@ export function BillsSection({ initialBills }: { initialBills: Bill[] }) {
             </SheetHeader>
             <form key={formKey} action={formAction} className="space-y-4 px-4 pb-6 pt-4">
               <div className="space-y-1">
+                <label htmlFor="elec-bill-month" className="text-sm font-medium">Billing month</label>
                 <Input
+                  id="elec-bill-month"
                   type="month"
                   name="billMonth"
                   className="text-base min-h-[44px]"
-                  aria-label="Billing month"
                 />
               </div>
               <div className="space-y-1">
+                <label htmlFor="elec-bill-kwh" className="text-sm font-medium">Usage (kWh)</label>
                 <Input
+                  id="elec-bill-kwh"
                   type="number"
                   name="totalKwh"
                   placeholder="e.g. 320"
@@ -131,11 +134,12 @@ export function BillsSection({ initialBills }: { initialBills: Bill[] }) {
                   step="0.1"
                   inputMode="decimal"
                   className="text-base min-h-[44px]"
-                  aria-label="Usage (kWh)"
                 />
               </div>
               <div className="space-y-1">
+                <label htmlFor="elec-bill-cost" className="text-sm font-medium">Total cost (£)</label>
                 <Input
+                  id="elec-bill-cost"
                   type="number"
                   name="totalCostGbp"
                   placeholder="e.g. 85.40"
@@ -143,16 +147,16 @@ export function BillsSection({ initialBills }: { initialBills: Bill[] }) {
                   step="0.01"
                   inputMode="decimal"
                   className="text-base min-h-[44px]"
-                  aria-label="Total cost (£)"
                 />
               </div>
               <div className="space-y-1">
+                <label htmlFor="elec-bill-notes" className="text-sm font-medium">Notes (optional)</label>
                 <Input
+                  id="elec-bill-notes"
                   type="text"
                   name="notes"
                   placeholder="e.g. includes standing charge"
                   className="text-base min-h-[44px]"
-                  aria-label="Notes (optional)"
                 />
               </div>
               {state?.error && (

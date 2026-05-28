@@ -102,51 +102,66 @@ export function ContractSection({ contract }: ContractSectionProps) {
               action={formAction}
               className="space-y-4 px-4 pb-6 pt-4"
             >
-              <Input
-                name="provider"
-                type="text"
-                defaultValue={contract?.provider ?? ""}
-                placeholder="e.g. Octopus Energy"
-                aria-label="Provider name"
-                required
-                className="text-base min-h-[44px]"
-              />
-              <Input
-                name="unitRate"
-                type="number"
-                inputMode="decimal"
-                step="0.01"
-                min={0}
-                defaultValue={contract?.unitRatePence ?? ""}
-                placeholder="e.g. 25.40"
-                aria-label="Unit rate (p/kWh)"
-                required
-                className="text-base min-h-[44px]"
-              />
-              <select
-                name="contractType"
-                defaultValue={contract?.contractType ?? "fixed"}
-                aria-label="Contract type"
-                className="text-base min-h-[44px] w-full rounded-md border border-input bg-background px-3 py-2"
-              >
-                <option value="fixed">Fixed</option>
-                <option value="variable">Variable</option>
-              </select>
-              <Input
-                name="expiryDate"
-                type="date"
-                defaultValue={contract?.expiryDate ?? ""}
-                aria-label="Contract expiry date (optional)"
-                className="text-base min-h-[44px]"
-              />
-              <Input
-                name="notes"
-                type="text"
-                defaultValue={contract?.notes ?? ""}
-                placeholder="e.g. tariff name"
-                aria-label="Notes (optional)"
-                className="text-base min-h-[44px]"
-              />
+              <div className="space-y-1">
+                <label htmlFor="contract-provider" className="text-sm font-medium">Provider</label>
+                <Input
+                  id="contract-provider"
+                  name="provider"
+                  type="text"
+                  defaultValue={contract?.provider ?? ""}
+                  placeholder="e.g. Octopus Energy"
+                  required
+                  className="text-base min-h-[44px]"
+                />
+              </div>
+              <div className="space-y-1">
+                <label htmlFor="contract-unit-rate" className="text-sm font-medium">Unit rate (p/kWh)</label>
+                <Input
+                  id="contract-unit-rate"
+                  name="unitRate"
+                  type="number"
+                  inputMode="decimal"
+                  step="0.01"
+                  min={0}
+                  defaultValue={contract?.unitRatePence ?? ""}
+                  placeholder="e.g. 25.40"
+                  required
+                  className="text-base min-h-[44px]"
+                />
+              </div>
+              <div className="space-y-1">
+                <label htmlFor="contract-type" className="text-sm font-medium">Contract type</label>
+                <select
+                  id="contract-type"
+                  name="contractType"
+                  defaultValue={contract?.contractType ?? "fixed"}
+                  className="text-base min-h-[44px] w-full rounded-md border border-input bg-background px-3 py-2"
+                >
+                  <option value="fixed">Fixed</option>
+                  <option value="variable">Variable</option>
+                </select>
+              </div>
+              <div className="space-y-1">
+                <label htmlFor="contract-expiry" className="text-sm font-medium">Expiry date (optional)</label>
+                <Input
+                  id="contract-expiry"
+                  name="expiryDate"
+                  type="date"
+                  defaultValue={contract?.expiryDate ?? ""}
+                  className="text-base min-h-[44px]"
+                />
+              </div>
+              <div className="space-y-1">
+                <label htmlFor="contract-notes" className="text-sm font-medium">Notes (optional)</label>
+                <Input
+                  id="contract-notes"
+                  name="notes"
+                  type="text"
+                  defaultValue={contract?.notes ?? ""}
+                  placeholder="e.g. tariff name"
+                  className="text-base min-h-[44px]"
+                />
+              </div>
               {state?.error && (
                 <div aria-live="polite" aria-atomic="true">
                   <p className="text-sm text-destructive">{state.error}</p>

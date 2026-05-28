@@ -128,7 +128,9 @@ export function PurchasesSection({ initialPurchases, lastSupplier = "" }: { init
             </SheetHeader>
             <form key={formKey} action={formAction} className="space-y-4 px-4 pb-6 pt-4">
               <div className="space-y-1">
+                <label htmlFor="oil-purchase-litres" className="text-sm font-medium">Litres delivered</label>
                 <Input
+                  id="oil-purchase-litres"
                   type="number"
                   name="litres"
                   placeholder="e.g. 900"
@@ -136,13 +138,14 @@ export function PurchasesSection({ initialPurchases, lastSupplier = "" }: { init
                   step="0.1"
                   inputMode="decimal"
                   className="text-base min-h-[44px]"
-                  aria-label="Litres delivered"
                   value={previewLitres}
                   onChange={(e) => setPreviewLitres(e.target.value)}
                 />
               </div>
               <div className="space-y-1">
+                <label htmlFor="oil-purchase-cost" className="text-sm font-medium">Total cost (£)</label>
                 <Input
+                  id="oil-purchase-cost"
                   type="number"
                   name="cost"
                   placeholder="e.g. 630.00"
@@ -150,7 +153,6 @@ export function PurchasesSection({ initialPurchases, lastSupplier = "" }: { init
                   step="0.01"
                   inputMode="decimal"
                   className="text-base min-h-[44px]"
-                  aria-label="Total cost in pounds"
                   value={previewCost}
                   onChange={(e) => setPreviewCost(e.target.value)}
                 />
@@ -159,22 +161,24 @@ export function PurchasesSection({ initialPurchases, lastSupplier = "" }: { init
                 )}
               </div>
               <div className="space-y-1">
+                <label htmlFor="oil-purchase-date" className="text-sm font-medium">Date</label>
                 <Input
+                  id="oil-purchase-date"
                   type="date"
                   name="date"
                   defaultValue={new Date().toISOString().split("T")[0]}
                   className="text-base min-h-[44px]"
-                  aria-label="Purchase date"
                 />
               </div>
               <div className="space-y-1">
+                <label htmlFor="oil-purchase-supplier" className="text-sm font-medium">Supplier</label>
                 <Input
+                  id="oil-purchase-supplier"
                   type="text"
                   name="supplier"
                   placeholder="e.g. J&R Fuels"
                   defaultValue={lastSupplier}
                   className="text-base min-h-[44px]"
-                  aria-label="Supplier"
                 />
               </div>
               {state?.error && (

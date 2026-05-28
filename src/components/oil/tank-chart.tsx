@@ -27,6 +27,25 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+// Custom Y-axis tick: shifts the anchor right by 20px so numbers don't clip
+// against the SVG left boundary. Recharts hardcodes tspan x, so dx on the
+// outer <text> is ignored — we must override x in a custom renderer.
+function YAxisTick({ x = 0, y = 0, payload }: { x?: number; y?: number; payload?: { value: number } }) {
+  return (
+    <text
+      x={x + 20}
+      y={y}
+      dy="0.355em"
+      textAnchor="end"
+      fontSize={11}
+      fill="var(--muted-foreground)"
+      className="recharts-text recharts-cartesian-axis-tick-value"
+    >
+      {payload?.value}cm
+    </text>
+  );
+}
+
 export function TankChart({ readings, purchases }: TankChartProps) {
   if (readings.length === 0) return null;
 
@@ -41,16 +60,25 @@ export function TankChart({ readings, purchases }: TankChartProps) {
   // Purchase dates as ReferenceLine x values — must be "YYYY-MM-DD" to match XAxis dataKey
   const purchaseDates = purchases.map((p) => p.purchaseDate);
 
+  // Compute evenly-spaced X-axis ticks — explicitly include last point so
+  // Recharts doesn't append it a second time, then deduplicate.
+  const tickCount = 6;
+  const step = Math.max(1, Math.floor((data.length - 1) / (tickCount - 1)));
+  const ticks = [
+    ...Array.from({ length: tickCount - 1 }, (_, i) => data[i * step].date),
+    data[data.length - 1].date, // always end at the final reading
+  ].filter((v, i, arr) => arr.indexOf(v) === i);
+
   return (
     <ChartContainer config={chartConfig} className="h-[220px] w-full">
-      <LineChart data={data} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
+      <LineChart data={data} margin={{ top: 20, right: 8, left: 0, bottom: 0 }}>
         <CartesianGrid vertical={false} strokeOpacity={0.3} />
         <XAxis
           dataKey="date"
           tickLine={false}
           axisLine={false}
           tick={{ fontSize: 11 }}
-          interval="preserveStartEnd"
+          ticks={ticks}
           tickFormatter={(value: string) =>
             new Date(value + "T12:00:00").toLocaleDateString("en-GB", {
               day: "numeric",
@@ -61,9 +89,8 @@ export function TankChart({ readings, purchases }: TankChartProps) {
         <YAxis
           tickLine={false}
           axisLine={false}
-          tick={{ fontSize: 11 }}
-          tickFormatter={(v: number) => `${v}cm`}
-          width={40}
+          tick={<YAxisTick />}
+          width={60}
         />
         <ChartTooltip
           content={
@@ -79,7 +106,7 @@ export function TankChart({ readings, purchases }: TankChartProps) {
             />
           }
         />
-        {purchaseDates.map((d) => (
+        {purchaseDates.map((d, i) => (
           <ReferenceLine
             key={d}
             x={d}
@@ -90,10 +117,12 @@ export function TankChart({ readings, purchases }: TankChartProps) {
               value: new Date(d + "T12:00:00").toLocaleDateString("en-GB", {
                 day: "numeric",
                 month: "short",
+                year: "2-digit",
               }),
-              position: "top",
+              position: "insideTopRight",
               fontSize: 10,
               fill: "var(--muted-foreground)",
+              offset: i % 2 === 0 ? 4 : 16, // stagger overlapping labels vertically
             }}
           />
         ))}

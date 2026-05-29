@@ -48,7 +48,7 @@ export function AnnualUsageChart({ readings, mode }: Props) {
     return sortedLabels.map((label, i) => ({
       label,
       litres: Math.round(totals.get(label)!),
-      colorIndex: sortedLabels.length - i,
+      colorIndex: ((sortedLabels.length - 1 - i) % 5) + 1,
     }));
   }, [readings, mode]);
 

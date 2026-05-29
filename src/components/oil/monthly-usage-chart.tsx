@@ -31,7 +31,7 @@ export function MonthlyUsageChart({ readings }: Props) {
     // Assign colorIndex: most recent year = 1, older = higher index
     const yearMetas: YearMeta[] = uniqueYears.map((label, i) => ({
       label,
-      colorIndex: uniqueYears.length - i,
+      colorIndex: ((uniqueYears.length - 1 - i) % 5) + 1,
     }));
 
     // Build chartConfig from years array

@@ -2,6 +2,8 @@
 
 export const MS_PER_DAY = 86_400_000;
 export const MONTH_START_DAYS = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335];
+// Season-mode tick positions: Oct=1, Nov=32, Dec=62, Jan=93, Feb=124, Mar=152, Apr=183, May=213, Jun=244, Jul=274, Aug=305, Sep=335
+export const SEASON_START_DAYS = [1, 32, 62, 93, 124, 152, 183, 213, 244, 274, 305, 335];
 
 export type GroupingMode = "calendar" | "season";
 
@@ -107,7 +109,7 @@ export function groupReadings(
   const sortedLabels = [...byYear.keys()].sort();
   const years: YearMeta[] = sortedLabels.map((label, i) => ({
     label,
-    colorIndex: sortedLabels.length - i, // most recent gets colorIndex=1
+    colorIndex: ((sortedLabels.length - 1 - i) % 5) + 1, // most recent gets colorIndex=1, wraps at 5
   }));
 
   // 3. Merge into flat array keyed by dayPos

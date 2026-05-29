@@ -28,18 +28,21 @@
 ## Phase Details
 
 ### Phase 6: Multi-Year Chart
-**Goal**: Users can see oil consumption trends across multiple years on a single chart, with meaningful grouping by calendar year or heating season
+**Goal**: Users can see oil consumption patterns across multiple years via three complementary views: raw tank-level history, monthly usage overlaid by calendar year, and annual/seasonal totals with a CY vs HS toggle
 **Depends on**: Phase 5 (oil domain complete)
 **Requirements**: CHART-01, CHART-02
 **Success Criteria** (what must be TRUE):
-  1. The oil chart page displays a distinct coloured line for each year (or heating season) of data, overlaid on shared axes with a legend identifying each line
-  2. A toggle control on the oil chart page switches grouping between calendar year (Jan–Dec) and heating season (Oct–Sep, e.g. "2024/25"), and the chart re-renders accordingly
-  3. Selecting a grouping that has no data for a given year gracefully omits that year rather than rendering an empty or broken line
+  1. The oil chart page offers three views via a segmented control: "Raw" (all readings chronological), "Monthly" (usage per calendar month, years overlaid), "Annual" (total usage per year/season, CY vs HS sub-toggle)
+  2. Raw view: distinct coloured line per year overlaid on shared Jan–Dec axes with a legend; years with no data omitted
+  3. Monthly view: consumption (cm or L) aggregated per calendar month via linear interpolation between readings; years overlaid so seasonal patterns are comparable across years
+  4. Annual view: total consumption per calendar year or heating season (Oct–Sep); CY vs HS sub-toggle switches the grouping, chart re-renders without a server fetch
+  5. All three views render correctly with the seeded historical data; empty states are handled gracefully
 **Plans**: 3 plans
   - [x] 06-01-PLAN.md — Pure grouping transform library (oil-chart-grouping.ts) + unit tests
   - [x] 06-02-PLAN.md — Add --year-color-1..5 palette to globals.css (light + dark)
   - [ ] 06-03-PLAN.md — GroupingToggle + MultiYearTankChart + oil page wiring + Playwright E2E
 **UI hint**: yes
+**Design note (2026-05-29)**: Raw height overlay is the correct base view. Monthly usage (interpolated consumption/month, years overlaid) and Annual usage (total per CY or HS) were added after initial implementation — these derived views are more analytically useful than raw height grouped by year/season. The CY vs HS toggle is only meaningful for Annual view; Monthly view is always calendar-month.
 
 ### Phase 7: Temperature Layer
 **Goal**: Historical temperature data from Open-Meteo is available in the app and visible as a secondary overlay on the oil chart, with Heating Degree Days calculated for use in analytics
@@ -52,6 +55,7 @@
   4. The temperature overlay can be toggled on/off so the chart is not cluttered when the user only wants to see consumption lines
 **Plans**: TBD
 **UI hint**: yes
+**Design constraint (2026-05-29)**: Temperature overlay does NOT make sense against the Raw (tank height) view — overlaying °C on a cm/L Y-axis has no analytical meaning. Temperature should only be offered as a secondary axis on the Monthly and/or Annual usage views (Phase 6), where it shows the relationship between cold weather and consumption. When designing the overlay UI, gate the temperature toggle so it is only available when the chart is in Monthly or Annual view, not Raw.
 
 ### Phase 8: Analytics Page
 **Goal**: A new Analytics tab is accessible from the bottom navigation and shows users their year-over-year consumption comparison, projected annual spend, and refill pattern summary

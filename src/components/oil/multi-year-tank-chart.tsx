@@ -59,9 +59,12 @@ const SEASON_LABELS = ["Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Ju
 export function MultiYearTankChart({ readings, purchases }: Props) {
   const [mode, setMode] = useState<GroupingMode>("calendar");
 
-  if (readings.length === 0) return null;
+  const { merged, years } = useMemo(
+    () => (readings.length === 0 ? { merged: [], years: [] } : groupReadings(readings, mode)),
+    [readings, mode]
+  );
 
-  const { merged, years } = useMemo(() => groupReadings(readings, mode), [readings, mode]);
+  if (readings.length === 0) return null;
 
   const chartConfig: ChartConfig = Object.fromEntries(
     years.map((y) => [y.label, { label: y.label, color: `var(--year-color-${y.colorIndex})` }])

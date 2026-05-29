@@ -21,6 +21,7 @@ import {
   dayOfYear,
   daysSinceOct1,
   MONTH_START_DAYS,
+  SEASON_START_DAYS,
   type GroupingMode,
 } from "@/lib/oil-chart-grouping";
 import { GroupingToggle } from "./grouping-toggle";
@@ -80,10 +81,11 @@ function RawViewContent({
     years.map((y) => [y.label, { label: y.label, color: `var(--year-color-${y.colorIndex})` }])
   );
 
-  // Tick formatter selects label set based on mode; MONTH_START_DAYS gives the positions
+  // Tick positions and labels depend on mode
   const monthLabels = mode === "calendar" ? CAL_LABELS : SEASON_LABELS;
+  const tickPositions = mode === "calendar" ? MONTH_START_DAYS : SEASON_START_DAYS;
   const tickFormatter = (value: number) => {
-    const idx = MONTH_START_DAYS.indexOf(value);
+    const idx = tickPositions.indexOf(value);
     return idx >= 0 ? monthLabels[idx] : "";
   };
 
@@ -102,8 +104,8 @@ function RawViewContent({
           <XAxis
             dataKey="dayPos"
             type="number"
-            domain={mode === "calendar" ? [1, 366] : [1, 365]}
-            ticks={MONTH_START_DAYS}
+            domain={[1, 366]}
+            ticks={tickPositions}
             tickLine={false}
             axisLine={false}
             tick={{ fontSize: 11 }}
@@ -114,7 +116,7 @@ function RawViewContent({
             content={
               <ChartTooltipContent
                 labelFormatter={(label) => {
-                  const idx = MONTH_START_DAYS.indexOf(Number(label));
+                  const idx = tickPositions.indexOf(Number(label));
                   return idx >= 0 ? monthLabels[idx] : `Day ${label}`;
                 }}
                 formatter={(value: unknown, name) => [

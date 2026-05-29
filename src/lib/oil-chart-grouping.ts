@@ -1,6 +1,6 @@
 // Pure grouping transforms for the multi-year oil chart. No React dependencies.
 
-const MS_PER_DAY = 86_400_000;
+export const MS_PER_DAY = 86_400_000;
 export const MONTH_START_DAYS = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335];
 
 export type GroupingMode = "calendar" | "season";
@@ -121,4 +121,100 @@ export function groupReadings(
 
   const merged = [...posMap.values()].sort((a, b) => a.dayPos - b.dayPos);
   return { merged, years };
+}
+
+export interface MonthlyPoint {
+  /** Calendar year as 4-digit string, e.g. "2024" */
+  year: string;
+  /** Month number 1-12 */
+  month: number;
+  /** Estimated litres consumed in this calendar month */
+  litres: number;
+}
+
+/**
+ * Computes estimated oil consumption (litres) per calendar month from
+ * irregular tank height readings using linear interpolation.
+ *
+ * Algorithm:
+ * 1. Sort readings ascending by date.
+ * 2. For each consecutive pair [r1, r2]:
+ *    a. If r2.heightCm >= r1.heightCm → refill or flat; SKIP (no consumption).
+ *    b. Compute daily depletion rate = (r1.heightCm - r2.heightCm) / days between.
+ *    c. For each calendar month overlapping the [r1.date, r2.date) interval:
+ *       - Compute overlap days (integer floor of days in this month that fall in the interval).
+ *       - litres for this month += overlapDays * dailyRateCm * CM_TO_LITRES_RATIO.
+ * 3. Return one MonthlyPoint per (year, month) pair with non-zero litres, sorted
+ *    ascending by year then month.
+ *
+ * Notes:
+ * - Uses parseLocalDate (T12:00:00) — same DST-safe pattern as the rest of this file.
+ * - CM_TO_LITRES_RATIO = 10.5 — applied at accumulation time to preserve fractional
+ *   cm precision during summation.
+ * - Does NOT use cmToLitres() (which rounds) to avoid compounding rounding errors.
+ */
+export function computeMonthlyUsage(
+  readings: { readingDate: string; heightCm: number }[]
+): MonthlyPoint[] {
+  if (readings.length < 2) return [];
+
+  // Sort ascending
+  const sorted = [...readings].sort((a, b) =>
+    a.readingDate.localeCompare(b.readingDate)
+  );
+
+  // Accumulator keyed by "YYYY-MM" string
+  const acc = new Map<string, number>();
+
+  for (let i = 0; i < sorted.length - 1; i++) {
+    const r1 = sorted[i];
+    const r2 = sorted[i + 1];
+
+    // Skip refill events and zero-change events
+    if (r2.heightCm >= r1.heightCm) continue;
+
+    const d1 = parseLocalDate(r1.readingDate);
+    const d2 = parseLocalDate(r2.readingDate);
+    const totalDays = Math.round((d2.getTime() - d1.getTime()) / MS_PER_DAY);
+    if (totalDays <= 0) continue;
+
+    const dailyRateCm = (r1.heightCm - r2.heightCm) / totalDays;
+
+    // Walk through each calendar month that the segment [d1, d2) overlaps.
+    // Month boundaries use noon (12:00:00) to match parseLocalDate — this keeps
+    // all arithmetic consistent and avoids 0.5-day rounding errors from mixing
+    // midnight month boundaries with noon reading dates.
+    let cursor = new Date(d1.getFullYear(), d1.getMonth(), 1, 12, 0, 0);
+    while (cursor < d2) {
+      const monthStart = cursor;
+      // First day of next month at noon
+      const nextMonth = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1, 12, 0, 0);
+      const monthEnd = nextMonth;
+
+      // Overlap = [max(d1, monthStart), min(d2, monthEnd))
+      const overlapStart = d1 > monthStart ? d1 : monthStart;
+      const overlapEnd = d2 < monthEnd ? d2 : monthEnd;
+      const overlapDays = Math.round(
+        (overlapEnd.getTime() - overlapStart.getTime()) / MS_PER_DAY
+      );
+
+      if (overlapDays > 0) {
+        const year = String(cursor.getFullYear());
+        const month = cursor.getMonth() + 1; // 1-indexed
+        const key = `${year}-${String(month).padStart(2, "0")}`;
+        const litresThisMonth = overlapDays * dailyRateCm * 10.5; // CM_TO_LITRES_RATIO
+        acc.set(key, (acc.get(key) ?? 0) + litresThisMonth);
+      }
+
+      cursor = nextMonth;
+    }
+  }
+
+  // Build result array sorted by year then month
+  return [...acc.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([key, litres]) => {
+      const [year, monthStr] = key.split("-");
+      return { year, month: parseInt(monthStr, 10), litres: Math.round(litres) };
+    });
 }

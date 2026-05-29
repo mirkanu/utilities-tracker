@@ -116,22 +116,13 @@ export function MultiYearTankChart({ readings, purchases }: Props) {
               />
             }
           />
-          {purchasePositions.map((p, i) => (
+          {purchasePositions.map((p) => (
             <ReferenceLine
               key={p.key}
               x={p.pos}
               stroke="var(--muted-foreground)"
               strokeDasharray="4 4"
               strokeOpacity={0.6}
-              label={{
-                value: new Date(p.key + "T12:00:00").toLocaleDateString("en-GB", {
-                  day: "numeric", month: "short", year: "2-digit",
-                }),
-                position: "insideTopRight",
-                fontSize: 10,
-                fill: "var(--muted-foreground)",
-                offset: i % 2 === 0 ? 4 : 16,
-              }}
             />
           ))}
           {years.map((y) => (
@@ -144,7 +135,7 @@ export function MultiYearTankChart({ readings, purchases }: Props) {
               strokeDasharray="5 4"
               dot={{ r: 4, fill: `var(--year-color-${y.colorIndex})`, strokeWidth: 0 }}
               activeDot={{ r: 5 }}
-              connectNulls={false}
+              connectNulls={true}
               isAnimationActive={false}
             />
           ))}

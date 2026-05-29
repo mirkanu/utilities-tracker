@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Analytics & Insights
 status: executing
-stopped_at: Phase 6 Plan 03 complete (Raw view verified); Plans 04+05 pending
-last_updated: "2026-05-29T17:30:00.000Z"
-last_activity: 2026-05-29 -- Phase 6 Plan 03 E2E verified; ROADMAP expanded to 5 plans
+stopped_at: Phase 6 UI-SPEC approved
+last_updated: "2026-05-29T18:49:16.170Z"
+last_activity: 2026-05-29 -- Phase 06 execution started
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 5
   completed_plans: 3
-  percent: 15
+  percent: 60
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-29 — v1.1 started)
 
 **Core value:** See at a glance how much oil and electricity you're using, know when the oil will run out, and never miss an electricity contract renewal — all from your phone.
-**Current focus:** Phase 6 — multi-year-chart
+**Current focus:** Phase 06 — multi-year-chart
 
 ## Current Position
 
-Phase: 6 (multi-year-chart) — EXECUTING
-Plan: 1 of 3
-Status: Executing Phase 6
-Last activity: 2026-05-29 -- Phase 6 execution started
+Phase: 06 (multi-year-chart) — EXECUTING
+Plan: 1 of 5
+Status: Executing Phase 06
+Last activity: 2026-05-29 -- Phase 06 execution started
 
 Progress: [          ] 0%
 

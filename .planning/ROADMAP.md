@@ -41,7 +41,7 @@
   - [x] 06-01-PLAN.md — Pure grouping transform library (oil-chart-grouping.ts) + unit tests
   - [x] 06-02-PLAN.md — Add --year-color-1..5 palette to globals.css (light + dark)
   - [x] 06-03-PLAN.md — GroupingToggle + MultiYearTankChart (Raw view) + oil page wiring + Playwright E2E
-  - [ ] 06-04-PLAN.md — Monthly usage view: interpolated L/month per calendar month, years overlaid
+  - [x] 06-04-PLAN.md — Monthly usage view: interpolated L/month per calendar month, years overlaid
   - [ ] 06-05-PLAN.md — Annual totals view: total L per CY or HS, CY vs HS sub-toggle + 3-view segmented control + Playwright E2E
 **UI hint**: yes
 **Design note (2026-05-29)**: Raw height overlay is the correct base view. Monthly usage (interpolated consumption/month, years overlaid) and Annual usage (total per CY or HS) were added after initial implementation — these derived views are more analytically useful than raw height grouped by year/season. The CY vs HS toggle is only meaningful for Annual view; Monthly view is always calendar-month.

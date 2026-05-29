@@ -56,26 +56,24 @@
 
 ## Traceability
 
-To be filled by roadmapper.
-
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CHART-01 | — | Pending |
-| CHART-02 | — | Pending |
-| CHART-03 | — | Pending |
-| TEMP-01 | — | Pending |
-| TEMP-02 | — | Pending |
-| ANAL-01 | — | Pending |
-| ANAL-02 | — | Pending |
-| ANAL-03 | — | Pending |
-| ANAL-04 | — | Pending |
-| ANAL-05 | — | Pending |
-| ANAL-06 | — | Pending |
+| CHART-01 | Phase 6 | Pending |
+| CHART-02 | Phase 6 | Pending |
+| CHART-03 | Phase 7 | Pending |
+| TEMP-01 | Phase 7 | Pending |
+| TEMP-02 | Phase 7 | Pending |
+| ANAL-01 | Phase 8 | Pending |
+| ANAL-02 | Phase 8 | Pending |
+| ANAL-04 | Phase 8 | Pending |
+| ANAL-05 | Phase 8 | Pending |
+| ANAL-03 | Phase 9 | Pending |
+| ANAL-06 | Phase 9 | Pending |
 
 **Coverage:**
 - v1.1 requirements: 11 total
-- Mapped to phases: 0 (roadmap pending)
-- Unmapped: 11
+- Mapped to phases: 11
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-05-29*

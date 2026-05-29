@@ -3,7 +3,7 @@ import { oilReadings, oilPurchases } from "@/lib/db/schema";
 import { desc } from "drizzle-orm";
 import { computeDepletion } from "@/lib/oil-depletion";
 import { DepletionCard } from "@/components/oil/depletion-card";
-import { TankChart } from "@/components/oil/tank-chart";
+import { MultiYearTankChart } from "@/components/oil/multi-year-tank-chart";
 import { ReadingsSection } from "@/components/oil/readings-section";
 import { PurchasesSection } from "@/components/oil/purchases-section";
 
@@ -36,7 +36,7 @@ export default async function OilPage() {
       />
 
       {/* Tank level chart — null when no readings (component handles empty gracefully) */}
-      <TankChart
+      <MultiYearTankChart
         readings={readings.map((r) => ({
           readingDate: r.readingDate,
           heightCm: r.heightCm,

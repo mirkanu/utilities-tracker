@@ -11,8 +11,10 @@ export default function OilLoading() {
       {/* Depletion card skeleton */}
       <Skeleton className="h-20 w-full rounded-lg" />
 
-      {/* Chart skeleton — matches fixed 220px chart height */}
-      <Skeleton className="h-[220px] w-full rounded-lg" />
+      {/* Toggle skeleton — matches GroupingToggle h-11 */}
+      <Skeleton className="h-11 w-full rounded-lg" />
+      {/* Chart skeleton — bumped to 260px for multi-year layout */}
+      <Skeleton className="h-[260px] w-full rounded-lg" />
 
       {/* Readings section */}
       <div className="space-y-3">

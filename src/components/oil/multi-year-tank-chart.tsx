@@ -24,6 +24,9 @@ import {
   type GroupingMode,
 } from "@/lib/oil-chart-grouping";
 import { GroupingToggle } from "./grouping-toggle";
+import { ViewToggle, type ChartView } from "./view-toggle";
+import { MonthlyUsageChart } from "./monthly-usage-chart";
+import { AnnualUsageChart } from "./annual-usage-chart";
 
 interface Props {
   readings: { readingDate: string; heightCm: number }[];
@@ -56,15 +59,22 @@ const CAL_LABELS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct",
 // Month label sequence for season mode (Oct..Sep)
 const SEASON_LABELS = ["Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep"];
 
-export function MultiYearTankChart({ readings, purchases }: Props) {
-  const [mode, setMode] = useState<GroupingMode>("calendar");
-
+function RawViewContent({
+  readings,
+  purchases,
+  mode,
+}: {
+  readings: Props["readings"];
+  purchases: Props["purchases"];
+  mode: GroupingMode;
+}) {
   const { merged, years } = useMemo(
-    () => (readings.length === 0 ? { merged: [], years: [] } : groupReadings(readings, mode)),
+    () =>
+      readings.length === 0
+        ? { merged: [], years: [] }
+        : groupReadings(readings, mode),
     [readings, mode]
   );
-
-  if (readings.length === 0) return null;
 
   const chartConfig: ChartConfig = Object.fromEntries(
     years.map((y) => [y.label, { label: y.label, color: `var(--year-color-${y.colorIndex})` }])
@@ -85,9 +95,7 @@ export function MultiYearTankChart({ readings, purchases }: Props) {
   }));
 
   return (
-    <div className="space-y-2">
-      <GroupingToggle value={mode} onChange={setMode} />
-
+    <>
       <ChartContainer config={chartConfig} className="h-[260px] w-full">
         <LineChart data={merged} margin={{ top: 20, right: 8, left: 0, bottom: 0 }}>
           <CartesianGrid vertical={false} strokeOpacity={0.3} />
@@ -155,6 +163,33 @@ export function MultiYearTankChart({ readings, purchases }: Props) {
           </div>
         ))}
       </div>
+    </>
+  );
+}
+
+export function MultiYearTankChart({ readings, purchases }: Props) {
+  const [view, setView] = useState<ChartView>("raw");
+  const [groupingMode, setGroupingMode] = useState<GroupingMode>("calendar");
+
+  if (readings.length === 0) return null;
+
+  return (
+    <div className="space-y-2">
+      <ViewToggle value={view} onChange={setView} />
+
+      {view === "annual" && (
+        <GroupingToggle value={groupingMode} onChange={setGroupingMode} />
+      )}
+
+      {view === "raw" && (
+        <RawViewContent readings={readings} purchases={purchases} mode={groupingMode} />
+      )}
+      {view === "monthly" && (
+        <MonthlyUsageChart readings={readings} />
+      )}
+      {view === "annual" && (
+        <AnnualUsageChart readings={readings} mode={groupingMode} />
+      )}
     </div>
   );
 }

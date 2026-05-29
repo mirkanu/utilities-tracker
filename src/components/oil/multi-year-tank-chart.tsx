@@ -179,7 +179,7 @@ export function MultiYearTankChart({ readings, purchases }: Props) {
     <div className="space-y-2">
       <ViewToggle value={view} onChange={setView} />
 
-      {view === "annual" && (
+      {(view === "annual" || view === "raw") && (
         <GroupingToggle value={groupingMode} onChange={setGroupingMode} />
       )}
 

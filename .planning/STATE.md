@@ -4,8 +4,8 @@ milestone: v1.1
 milestone_name: Analytics & Insights
 status: executing
 stopped_at: Phase 6 UI-SPEC approved
-last_updated: "2026-05-29T15:08:45.019Z"
-last_activity: 2026-05-29 -- Phase 6 planning complete
+last_updated: "2026-05-29T15:16:40.974Z"
+last_activity: 2026-05-29 -- Phase 6 execution started
 progress:
   total_phases: 4
   completed_phases: 0
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-29 — v1.1 started)
 
 **Core value:** See at a glance how much oil and electricity you're using, know when the oil will run out, and never miss an electricity contract renewal — all from your phone.
-**Current focus:** v1.1 Analytics & Insights — requirements and roadmap
+**Current focus:** Phase 6 — multi-year-chart
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Ready to execute
-Last activity: 2026-05-29 -- Phase 6 planning complete
+Phase: 6 (multi-year-chart) — EXECUTING
+Plan: 1 of 3
+Status: Executing Phase 6
+Last activity: 2026-05-29 -- Phase 6 execution started
 
 Progress: [          ] 0%
 

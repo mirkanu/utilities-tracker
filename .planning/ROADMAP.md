@@ -36,8 +36,8 @@
   2. A toggle control on the oil chart page switches grouping between calendar year (Jan–Dec) and heating season (Oct–Sep, e.g. "2024/25"), and the chart re-renders accordingly
   3. Selecting a grouping that has no data for a given year gracefully omits that year rather than rendering an empty or broken line
 **Plans**: 3 plans
-  - [ ] 06-01-PLAN.md — Pure grouping transform library (oil-chart-grouping.ts) + unit tests
-  - [ ] 06-02-PLAN.md — Add --year-color-1..5 palette to globals.css (light + dark)
+  - [x] 06-01-PLAN.md — Pure grouping transform library (oil-chart-grouping.ts) + unit tests
+  - [x] 06-02-PLAN.md — Add --year-color-1..5 palette to globals.css (light + dark)
   - [ ] 06-03-PLAN.md — GroupingToggle + MultiYearTankChart + oil page wiring + Playwright E2E
 **UI hint**: yes
 
@@ -86,7 +86,7 @@
 | 3. Electricity Domain | v1.0 | 5/5 | Complete | 2026-05-27 |
 | 4. Dashboard & Polish | v1.0 | 4/4 | Complete | 2026-05-28 |
 | 5. Oil Volume Conversion | v1.0 | 3/3 | Complete | 2026-05-28 |
-| 6. Multi-Year Chart | v1.1 | 0/? | Not started | - |
+| 6. Multi-Year Chart | v1.1 | 2/3 | In Progress|  |
 | 7. Temperature Layer | v1.1 | 0/? | Not started | - |
 | 8. Analytics Page | v1.1 | 0/? | Not started | - |
 | 9. Anomaly Detection & Market Pricing | v1.1 | 0/? | Not started | - |

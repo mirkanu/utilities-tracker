@@ -88,6 +88,9 @@
   --year-color-3: oklch(0.60 0.18 55);    /* amber */
   --year-color-4: oklch(0.60 0.18 20);    /* red-orange */
   --year-color-5: oklch(0.60 0.18 295);   /* violet */
+
+  /* Temperature overlay — Phase 7 */
+  --temp-color: oklch(0.65 0.14 200);   /* cyan — temperature line */
 }
 
 .dark {
@@ -129,6 +132,9 @@
   --year-color-3: oklch(0.70 0.16 55);
   --year-color-4: oklch(0.70 0.16 20);
   --year-color-5: oklch(0.70 0.16 295);
+
+  /* Temperature overlay — Phase 7 */
+  --temp-color: oklch(0.75 0.12 200);   /* lighter cyan for dark mode */
 }
 
 @layer base {

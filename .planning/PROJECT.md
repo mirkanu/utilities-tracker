@@ -35,8 +35,10 @@ See at a glance how much oil and electricity you're using, know when the oil wil
 
 **v1.1 — Analytics & Insights**
 
-- [ ] Multi-year overlaid oil chart (one line per year, colour-coded)
-- [ ] Toggle between calendar year (Jan–Dec) and heating season (Oct–Sep) groupings
+- ✓ Multi-year overlaid oil chart (one line per year, colour-coded) — v1.1 (Phase 6)
+- ✓ Toggle between calendar year (Jan–Dec) and heating season (Oct–Sep) groupings — v1.1 (Phase 6)
+- ✓ Monthly consumption view (L/month per year overlaid) — v1.1 (Phase 6)
+- ✓ Annual consumption view (L/year or L/season bar chart) — v1.1 (Phase 6)
 - [ ] Historical temperature overlay on the oil chart (Open-Meteo, Broughshane NI)
 - [ ] Heating Degree Days (HDD, base 15.5°C) calculated per period for normalised analytics
 - [ ] New Analytics tab (/analytics route, 4th tab in bottom nav)
@@ -121,4 +123,4 @@ See at a glance how much oil and electricity you're using, know when the oil wil
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-29 — v1.1 milestone started*
+*Last updated: 2026-05-29 — Phase 6 complete (three-view oil chart shipped)*

@@ -37,10 +37,12 @@
   3. Monthly view: consumption (cm or L) aggregated per calendar month via linear interpolation between readings; years overlaid so seasonal patterns are comparable across years
   4. Annual view: total consumption per calendar year or heating season (Oct–Sep); CY vs HS sub-toggle switches the grouping, chart re-renders without a server fetch
   5. All three views render correctly with the seeded historical data; empty states are handled gracefully
-**Plans**: 3 plans
+**Plans**: 5 plans
   - [x] 06-01-PLAN.md — Pure grouping transform library (oil-chart-grouping.ts) + unit tests
   - [x] 06-02-PLAN.md — Add --year-color-1..5 palette to globals.css (light + dark)
-  - [ ] 06-03-PLAN.md — GroupingToggle + MultiYearTankChart + oil page wiring + Playwright E2E
+  - [x] 06-03-PLAN.md — GroupingToggle + MultiYearTankChart (Raw view) + oil page wiring + Playwright E2E
+  - [ ] 06-04-PLAN.md — Monthly usage view: interpolated L/month per calendar month, years overlaid
+  - [ ] 06-05-PLAN.md — Annual totals view: total L per CY or HS, CY vs HS sub-toggle + 3-view segmented control + Playwright E2E
 **UI hint**: yes
 **Design note (2026-05-29)**: Raw height overlay is the correct base view. Monthly usage (interpolated consumption/month, years overlaid) and Annual usage (total per CY or HS) were added after initial implementation — these derived views are more analytically useful than raw height grouped by year/season. The CY vs HS toggle is only meaningful for Annual view; Monthly view is always calendar-month.
 
@@ -90,7 +92,7 @@
 | 3. Electricity Domain | v1.0 | 5/5 | Complete | 2026-05-27 |
 | 4. Dashboard & Polish | v1.0 | 4/4 | Complete | 2026-05-28 |
 | 5. Oil Volume Conversion | v1.0 | 3/3 | Complete | 2026-05-28 |
-| 6. Multi-Year Chart | v1.1 | 2/3 | In Progress|  |
+| 6. Multi-Year Chart | v1.1 | 3/5 | In Progress|  |
 | 7. Temperature Layer | v1.1 | 0/? | Not started | - |
 | 8. Analytics Page | v1.1 | 0/? | Not started | - |
 | 9. Anomaly Detection & Market Pricing | v1.1 | 0/? | Not started | - |

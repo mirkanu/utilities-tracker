@@ -53,3 +53,11 @@ export const electricityContracts = pgTable("electricity_contracts", {
   isActive: boolean("is_active").notNull().default(true),
   notes: text("notes"),
 });
+
+// Temperature cache — Phase 7 (TEMP-01)
+export const dailyTemperatures = pgTable("daily_temperatures", {
+  date: date("date").primaryKey().notNull(),
+  avgTempC: numeric("avg_temp_c", { precision: 5, scale: 2 }).notNull(),
+  hdd: numeric("hdd", { precision: 5, scale: 2 }).notNull(),
+  fetchedAt: date("fetched_at").notNull(),
+});

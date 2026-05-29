@@ -33,16 +33,37 @@ See at a glance how much oil and electricity you're using, know when the oil wil
 
 ### Active
 
-*(Next milestone requirements go here — start with `/gsd-new-milestone`)*
+**v1.1 — Analytics & Insights**
+
+- [ ] Multi-year overlaid oil chart (one line per year, colour-coded)
+- [ ] Toggle between calendar year (Jan–Dec) and heating season (Oct–Sep) groupings
+- [ ] Historical temperature overlay on the oil chart (Open-Meteo, Broughshane NI)
+- [ ] Heating Degree Days (HDD, base 15.5°C) calculated per period for normalised analytics
+- [ ] New Analytics tab (/analytics route, 4th tab in bottom nav)
+- [ ] Year-over-year comparison cards (total L, total £, L/day, and HDD-normalised L/HDD)
+- [ ] Consumption anomaly detection (weeks/months running 2× above/below rolling baseline)
+- [ ] Projected annual spend at current L/day rate (litres + £)
+- [ ] Refill pattern analysis (avg days between purchases, trend over time)
+- [ ] Paid p/L vs BEIS UK domestic heating oil market price at each purchase date
 
 ### Out of Scope
 
 - Multi-user / household sharing — only one user needed; avoids auth complexity
 - Automated bill ingestion (email/photo parsing) — v2; v1 is manual entry only
-- Full tank dimension input for volume conversion — v2; v1 uses calibrated 10.5 L/cm constant; update the constant in oil-config.ts when tank is measured
-- Temperature correlation and trend analysis — v2 future; Northern Ireland (Broughshane) weather via Open-Meteo
+- Full tank dimension input for volume conversion — v1.0 uses calibrated 10.5 L/cm constant; update the constant in oil-config.ts when tank is measured
 - Electricity market comparison / deal switching — out of scope entirely
 - Push notifications — in-app alert sufficient for contract expiry
+- Electricity analytics (seasonal trends, YoY) — oil-first for v1.1; extend in v1.2 once oil analytics are proven
+
+## Current Milestone: v1.1 Analytics & Insights
+
+**Goal:** Surface meaningful patterns from accumulated oil consumption data — multi-year trends, temperature correlation, anomaly detection, and market price context.
+
+**Target features:**
+- Multi-year overlaid oil chart with calendar/heating-season toggle
+- Historical temperature overlay + Heating Degree Days (Open-Meteo API)
+- New Analytics tab with YoY comparison, anomaly flags, spend projection, refill patterns
+- Paid p/L vs BEIS UK market price comparison per purchase
 
 ## Context
 
@@ -62,7 +83,7 @@ See at a glance how much oil and electricity you're using, know when the oil wil
 
 - **Stack**: Must fit existing VPS Docker Compose setup — containerised, env vars from shared `.env.production`
 - **Auth**: Single-user password login; no need for OAuth or multi-user sessions
-- **Data entry**: All v1 data is manually entered by the owner; no external API dependencies in v1
+- **Data entry**: All user data is manually entered; external APIs (Open-Meteo, BEIS) are read-only enrichment only
 - **Hosting**: Cloudflare Tunnel ingress required; add rule to `/home/services/hetzner-vps/config.yml`
 - **Dates**: DATE columns only (never TIMESTAMP); TZ=Europe/London in Docker Compose
 
@@ -100,4 +121,4 @@ See at a glance how much oil and electricity you're using, know when the oil wil
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-28 after v1.0 milestone*
+*Last updated: 2026-05-29 — v1.1 milestone started*

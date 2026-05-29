@@ -1,37 +1,36 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: MVP
-status: milestone_archived
-stopped_at: v1.0 milestone archived 2026-05-28
-last_updated: "2026-05-28T20:00:00.000Z"
-last_activity: 2026-05-28 -- v1.0 milestone archived
+milestone: v1.1
+milestone_name: Analytics & Insights
+status: planning
+stopped_at: Milestone v1.1 started — defining requirements and roadmap
+last_updated: "2026-05-29T00:00:00.000Z"
+last_activity: 2026-05-29 -- Milestone v1.1 started
 progress:
-  total_phases: 5
-  completed_phases: 5
-  total_plans: 22
-  completed_plans: 22
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-05-28 after v1.0 milestone)
+See: .planning/PROJECT.md (updated 2026-05-29 — v1.1 started)
 
 **Core value:** See at a glance how much oil and electricity you're using, know when the oil will run out, and never miss an electricity contract renewal — all from your phone.
-**Current focus:** Planning next milestone
+**Current focus:** v1.1 Analytics & Insights — requirements and roadmap
 
 ## Current Position
 
-Phase: 05
-Plan: Not started
-Next: Phase 02 (oil-domain)
-Status: Milestone complete
-Last activity: 2026-05-28
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-05-29 — Milestone v1.1 started
 
-Progress: [██████████] 100%
+Progress: [          ] 0%
 
 ## Performance Metrics
 

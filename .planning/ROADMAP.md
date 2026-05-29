@@ -35,7 +35,10 @@
   1. The oil chart page displays a distinct coloured line for each year (or heating season) of data, overlaid on shared axes with a legend identifying each line
   2. A toggle control on the oil chart page switches grouping between calendar year (Jan–Dec) and heating season (Oct–Sep, e.g. "2024/25"), and the chart re-renders accordingly
   3. Selecting a grouping that has no data for a given year gracefully omits that year rather than rendering an empty or broken line
-**Plans**: TBD
+**Plans**: 3 plans
+  - [ ] 06-01-PLAN.md — Pure grouping transform library (oil-chart-grouping.ts) + unit tests
+  - [ ] 06-02-PLAN.md — Add --year-color-1..5 palette to globals.css (light + dark)
+  - [ ] 06-03-PLAN.md — GroupingToggle + MultiYearTankChart + oil page wiring + Playwright E2E
 **UI hint**: yes
 
 ### Phase 7: Temperature Layer

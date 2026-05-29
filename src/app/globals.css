@@ -81,6 +81,13 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Multi-year line palette — Phase 6 */
+  --year-color-1: oklch(0.60 0.18 250);   /* blue   — most recent / current year */
+  --year-color-2: oklch(0.60 0.18 145);   /* green */
+  --year-color-3: oklch(0.60 0.18 55);    /* amber */
+  --year-color-4: oklch(0.60 0.18 20);    /* red-orange */
+  --year-color-5: oklch(0.60 0.18 295);   /* violet */
 }
 
 .dark {
@@ -115,6 +122,13 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* Multi-year line palette dark mode — slightly lighter at same hue */
+  --year-color-1: oklch(0.70 0.16 250);
+  --year-color-2: oklch(0.70 0.16 145);
+  --year-color-3: oklch(0.70 0.16 55);
+  --year-color-4: oklch(0.70 0.16 20);
+  --year-color-5: oklch(0.70 0.16 295);
 }
 
 @layer base {

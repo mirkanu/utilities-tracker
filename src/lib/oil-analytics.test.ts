@@ -196,43 +196,45 @@ describe("computeProjectedSpend", () => {
   });
 
   it("daysRemaining counts whole days from today to Dec 31 of current year", () => {
-    // Today = Oct 5 2025. Dec 31 is 87 days away.
-    // Jan 1 to Oct 5 = 277 days, Oct 5 to Dec 31 = 87 days
+    // today = "2026-10-05", Dec 31 2026 is 87 days away (Oct 5 to Dec 31 = 87 days)
+    // Use recent readings with gentle depletion so regression stays positive
     const readings: R[] = [
-      r("2024-12-15", 100),
-      r("2025-09-30", 75),  // depletion segment after last purchase
+      r("2026-08-01", 100),
+      r("2026-09-30", 97),  // 2 cm drop over 60 days — gentle, tank stays high
     ];
-    const purchases: P[] = [p("2024-12-01", 500, 350)];
-    const result = computeProjectedSpend(readings, purchases, "2025-10-05");
+    const purchases: P[] = [p("2026-07-15", 500, 350)];
+    const result = computeProjectedSpend(readings, purchases, "2026-10-05");
     expect(result).not.toBeNull();
-    // Oct 5 to Dec 31 2025 = 87 days
+    // Oct 5 to Dec 31 2026 = 87 days
     expect(result!.daysRemaining).toBe(87);
   });
 
   it("currentLitresPerDay equals the litresPerDay returned by computeDepletion", () => {
+    // Use recent readings so the regression doesn't project past empty
     const readings: R[] = [
-      r("2024-12-15", 100),
-      r("2025-01-15", 90),   // 10 cm / 31 days
-      r("2025-02-15", 80),
+      r("2026-04-01", 100),
+      r("2026-05-01", 97),   // gentle 3 cm / 30 days
+      r("2026-05-20", 96),
     ];
-    const purchases: P[] = [p("2024-12-01", 500, 350)];
-    const result = computeProjectedSpend(readings, purchases, "2025-10-05");
+    const purchases: P[] = [p("2026-03-15", 500, 350)];
+    const result = computeProjectedSpend(readings, purchases, "2026-05-30");
     expect(result).not.toBeNull();
     expect(result!.currentLitresPerDay).toBeGreaterThan(0);
   });
 
   it("projectedGbp uses most recent purchase price per litre", () => {
+    // Use recent readings with gentle depletion so regression stays positive
     const readings: R[] = [
-      r("2024-11-01", 100),
-      r("2025-01-01", 85),
-      r("2025-06-01", 65),
+      r("2026-04-01", 100),
+      r("2026-05-01", 97),
+      r("2026-05-20", 96),
     ];
     // Most recent purchase: 600L for £420 → £0.70/L
     const purchases: P[] = [
-      p("2024-10-01", 500, 300),
-      p("2025-01-15", 600, 420),
+      p("2026-03-01", 500, 300),
+      p("2026-03-15", 600, 420),
     ];
-    const result = computeProjectedSpend(readings, purchases, "2025-10-05");
+    const result = computeProjectedSpend(readings, purchases, "2026-05-30");
     expect(result).not.toBeNull();
     // projectedGbp should use 420/600 = 0.70 per litre
     const expectedPricePerLitre = 420 / 600;
@@ -240,13 +242,14 @@ describe("computeProjectedSpend", () => {
   });
 
   it("periodLabel is 'This calendar year'", () => {
+    // Use recent readings with gentle depletion
     const readings: R[] = [
-      r("2024-12-15", 100),
-      r("2025-02-15", 80),
-      r("2025-06-15", 65),
+      r("2026-04-01", 100),
+      r("2026-05-01", 97),
+      r("2026-05-20", 96),
     ];
-    const purchases: P[] = [p("2024-12-01", 500, 350)];
-    const result = computeProjectedSpend(readings, purchases, "2025-10-05");
+    const purchases: P[] = [p("2026-03-15", 500, 350)];
+    const result = computeProjectedSpend(readings, purchases, "2026-05-30");
     expect(result).not.toBeNull();
     expect(result!.periodLabel).toBe("This calendar year");
   });

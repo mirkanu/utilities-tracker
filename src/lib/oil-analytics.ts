@@ -96,6 +96,12 @@ export function computeYearStats(
       const range = dateRangeByYear.get(label);
       let avgLitresPerDay = 0;
       if (range) {
+        // Approximation: denominator uses first/last raw reading dates for this
+        // calendar year. totalLitres may include prorated consumption from
+        // cross-year reading pairs (e.g. a pair spanning Dec 31 / Jan 1), so
+        // the denominator can be slightly shorter than the actual consumption
+        // period, inflating avgLitresPerDay for years where the earliest pair
+        // straddles January 1.
         const days = Math.max(
           1,
           Math.round(

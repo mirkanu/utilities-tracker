@@ -57,8 +57,8 @@
   4. The temperature overlay can be toggled on/off so the chart is not cluttered when the user only wants to see consumption lines
 **Plans**: 3 plans
   - [x] 07-01-PLAN.md — DB schema + Open-Meteo fetch service + HDD/aggregation utilities + unit tests + --temp-color CSS token
-  - [ ] 07-02-PLAN.md — TemperatureToggle component + dual y-axis chart modifications (MultiYearTankChart, MonthlyUsageChart, AnnualUsageChart converted to ComposedChart)
-  - [ ] 07-03-PLAN.md — oil/page.tsx wiring with error fallback + loading.tsx skeleton + Playwright E2E
+  - [x] 07-02-PLAN.md — TemperatureToggle component + dual y-axis chart modifications (MultiYearTankChart, MonthlyUsageChart, AnnualUsageChart converted to ComposedChart)
+  - [x] 07-03-PLAN.md — oil/page.tsx wiring with error fallback + loading.tsx skeleton + Playwright E2E
 **UI hint**: yes
 **Design constraint (2026-05-29)**: Temperature overlay does NOT make sense against the Raw (tank height) view — overlaying °C on a cm/L Y-axis has no analytical meaning. Temperature should only be offered as a secondary axis on the Monthly and/or Annual usage views (Phase 6), where it shows the relationship between cold weather and consumption. When designing the overlay UI, gate the temperature toggle so it is only available when the chart is in Monthly or Annual view, not Raw.
 

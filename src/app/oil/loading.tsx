@@ -13,8 +13,10 @@ export default function OilLoading() {
 
       {/* Toggle skeleton — matches GroupingToggle h-11 */}
       <Skeleton className="h-11 w-full rounded-lg" />
-      {/* Chart skeleton — bumped to 260px for multi-year layout */}
-      <Skeleton className="h-[260px] w-full rounded-lg" />
+      {/* Temperature toggle skeleton — left-aligned, narrower than view toggle (h-11 w-32) */}
+      <Skeleton className="h-11 w-32 rounded-md" />
+      {/* Chart skeleton — 300px to accommodate dual y-axis layout (Phase 7) */}
+      <Skeleton className="h-[300px] w-full rounded-lg" />
 
       {/* Readings section */}
       <div className="space-y-3">

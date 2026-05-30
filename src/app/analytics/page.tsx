@@ -5,7 +5,10 @@ import {
   computeYearStats,
   computeProjectedSpend,
   computeRefillPattern,
+  detectAnomalies,
 } from "@/lib/oil-analytics";
+import { computeMonthlyUsage } from "@/lib/oil-chart-grouping";
+import { AnomalyFlagsSection } from "@/components/analytics/anomaly-flags-section";
 import { fetchTemperatures, type DailyTemp } from "@/lib/temperature-fetch";
 import { YearComparisonCard } from "@/components/analytics/year-comparison-card";
 import { ProjectedSpendCard } from "@/components/analytics/projected-spend-card";
@@ -31,15 +34,24 @@ export default async function AnalyticsPage() {
     temperatures = [];
   }
 
-  const yearStats = computeYearStats(readings, purchases, temperatures);
+  const monthlyUsage = computeMonthlyUsage(readings);
+  const yearStats = computeYearStats(readings, purchases, temperatures, monthlyUsage);
   const projection = computeProjectedSpend(readings, purchases);
   const refillPattern = computeRefillPattern(purchases);
+  const anomalyFlags = detectAnomalies(readings, monthlyUsage);
 
   return (
     <div className="p-4 pt-6 space-y-6 pb-24">
       <div className="flex items-center justify-between">
         <h1 className="text-lg font-semibold">Analytics</h1>
       </div>
+
+      <section className="space-y-3">
+        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+          Anomalies
+        </h2>
+        <AnomalyFlagsSection flags={anomalyFlags} hasEnoughData={readings.length >= 3} />
+      </section>
 
       <section className="space-y-4">
         <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">

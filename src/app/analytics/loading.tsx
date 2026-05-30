@@ -6,6 +6,12 @@ export default function AnalyticsLoading() {
       {/* Page header */}
       <Skeleton className="h-6 w-24 rounded-md" />
 
+      {/* Anomalies section heading */}
+      <Skeleton className="h-4 w-24 rounded-md mt-6" />
+      {/* Two anomaly flag card skeletons */}
+      <Skeleton className="h-[72px] w-full rounded-lg mt-3" />
+      <Skeleton className="h-[72px] w-full rounded-lg mt-3" />
+
       {/* Year comparison section heading */}
       <Skeleton className="h-4 w-32 rounded-md mt-6" />
 

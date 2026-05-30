@@ -3,7 +3,10 @@ import {
   computeYearStats,
   computeProjectedSpend,
   computeRefillPattern,
+  detectAnomalies,
 } from "./oil-analytics";
+import type { AnomalyFlag } from "./oil-analytics";
+import { computeMonthlyUsage } from "./oil-chart-grouping";
 
 type R = { readingDate: string; heightCm: number };
 type P = { purchaseDate: string; litres: string; totalCostGbp: string };
@@ -354,5 +357,256 @@ describe("computeRefillPattern", () => {
     expect(result!.estimatedNextRefillDate!.getTime()).toBeGreaterThan(
       new Date("2025-10-05T12:00:00").getTime()
     );
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Helper: build readings that produce a given monthly usage sequence
+//
+// Strategy: produce one reading per month boundary, dropping by the target
+// litres each interval. 1 cm drop = 10.5 L, so cmDrop = litres / 10.5.
+// We start at heightCm=200 and subtract each month's cm drop in sequence.
+// Months with litres=0 are implemented as a refill (height goes UP) so that
+// computeMonthlyUsage skips the pair, producing a 0-litre month naturally.
+// ─────────────────────────────────────────────────────────────────────────────
+
+function buildReadingsForSequence(
+  litresPerMonth: number[],
+  startYear = 2020,
+  startMonth = 1 // 1-indexed
+): R[] {
+  const CM_TO_LITRES = 10.5;
+  let height = 200;
+  let year = startYear;
+  let month = startMonth;
+
+  const readings: R[] = [];
+
+  // First reading at the start of the sequence
+  const firstDate = `${year}-${String(month).padStart(2, "0")}-01`;
+  readings.push(r(firstDate, height));
+
+  for (const litres of litresPerMonth) {
+    // Advance to next month
+    month += 1;
+    if (month > 12) {
+      month = 1;
+      year += 1;
+    }
+    const dateStr = `${year}-${String(month).padStart(2, "0")}-01`;
+
+    if (litres === 0) {
+      // Simulate a refill: height goes up so computeMonthlyUsage skips this pair
+      height += 20; // arbitrary rise — marks a refill
+      readings.push(r(dateStr, height));
+    } else {
+      const cmDrop = litres / CM_TO_LITRES;
+      height = Math.max(1, height - cmDrop);
+      readings.push(r(dateStr, height));
+    }
+  }
+
+  return readings;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// detectAnomalies
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("detectAnomalies", () => {
+  it("empty readings returns []", () => {
+    expect(detectAnomalies([])).toEqual([]);
+  });
+
+  it("fewer than 3 readings returns []", () => {
+    const readings: R[] = [r("2024-01-01", 100), r("2024-02-01", 90)];
+    expect(detectAnomalies(readings)).toEqual([]);
+  });
+
+  it("fewer than 2 prior months in window returns []", () => {
+    // Only 2 months of data → the second month has window of 1 prior month, not enough
+    const readings = buildReadingsForSequence([100, 100], 2024, 1);
+    expect(detectAnomalies(readings)).toEqual([]);
+  });
+
+  it("above-baseline month is flagged with direction=above", () => {
+    // 12 months of 100L then one month of 350L (ratio = 3.5 → above)
+    const litres = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 350];
+    const readings = buildReadingsForSequence(litres, 2020, 1);
+    const flags = detectAnomalies(readings);
+    expect(flags.length).toBeGreaterThanOrEqual(1);
+    const aboveFlag = flags.find((f: AnomalyFlag) => f.direction === "above");
+    expect(aboveFlag).toBeDefined();
+    expect(aboveFlag!.multiplier).toBe(3.5);
+    expect(aboveFlag!.explanation).toMatch(/3\.5× above your rolling average/);
+  });
+
+  it("below-baseline month is flagged with direction=below", () => {
+    // 12 months of 100L then one month of 40L (ratio = 0.4 → below)
+    const litres = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 40];
+    const readings = buildReadingsForSequence(litres, 2020, 1);
+    const flags = detectAnomalies(readings);
+    const belowFlag = flags.find((f: AnomalyFlag) => f.direction === "below");
+    expect(belowFlag).toBeDefined();
+    expect(belowFlag!.multiplier).toBe(0.4);
+    expect(belowFlag!.explanation).toMatch(/0\.4× of your rolling average/);
+  });
+
+  it("actual=0 (refill-skip month) is NOT flagged below", () => {
+    // 12 months of 100L then one month of 0 (refill-skip)
+    const litres = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0];
+    const readings = buildReadingsForSequence(litres, 2020, 1);
+    const flags = detectAnomalies(readings);
+    // The zero month should not appear as a flag
+    const belowFlag = flags.find((f: AnomalyFlag) => f.direction === "below");
+    expect(belowFlag).toBeUndefined();
+  });
+
+  it("zero baseline months are excluded from median window", () => {
+    // Months: 0,0,100,100,100,100,300 — median of non-zero months in window before 300 is 100
+    // 300/100 = 3.0 → should be flagged above
+    const litres = [0, 0, 100, 100, 100, 100, 300];
+    const readings = buildReadingsForSequence(litres, 2020, 1);
+    const flags = detectAnomalies(readings);
+    const aboveFlag = flags.find((f: AnomalyFlag) => f.direction === "above");
+    expect(aboveFlag).toBeDefined();
+  });
+
+  it("flags returned most-recent-first", () => {
+    // Two obvious anomalies at different positions in the sequence
+    // 12 months of 100, then 300 (anomaly A), then 6 months of 100, then 300 (anomaly B)
+    const litres = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 300, 100, 100, 100, 100, 100, 100, 300];
+    const readings = buildReadingsForSequence(litres, 2020, 1);
+    const flags = detectAnomalies(readings);
+    expect(flags.length).toBeGreaterThanOrEqual(2);
+    // Most-recent-first: flag[0] should be from a later date than flag[1]
+    const parseFlag = (period: string) => {
+      const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      const [mon, yr] = period.split(" ");
+      return parseInt(yr) * 12 + months.indexOf(mon);
+    };
+    expect(parseFlag(flags[0].period)).toBeGreaterThan(parseFlag(flags[1].period));
+  });
+
+  it("period label format en-GB short month (e.g. 'Jan 2025')", () => {
+    const litres = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 350];
+    const readings = buildReadingsForSequence(litres, 2024, 1);
+    const flags = detectAnomalies(readings);
+    expect(flags.length).toBeGreaterThanOrEqual(1);
+    expect(flags[0].period).toMatch(/^[A-Z][a-z]{2} \d{4}$/);
+  });
+
+  it("multiplier is rounded to 1 decimal place", () => {
+    // Use 314L as the anomalous month (ratio 3.14 → rounds to 3.1)
+    const litres = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 314];
+    const readings = buildReadingsForSequence(litres, 2020, 1);
+    const flags = detectAnomalies(readings);
+    const aboveFlag = flags.find((f: AnomalyFlag) => f.direction === "above");
+    expect(aboveFlag).toBeDefined();
+    // 314 / 100 = 3.1 exactly after rounding to 1dp
+    expect(aboveFlag!.multiplier).toBe(3.1);
+  });
+
+  it("ratios between 0.5 and 2 are NOT flagged", () => {
+    // Months: 12 × 100, then 60 (0.6×), then 100 (1.0×), then 190 (1.9×)
+    const litres = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 60, 100, 190];
+    const readings = buildReadingsForSequence(litres, 2020, 1);
+    const flags = detectAnomalies(readings);
+    expect(flags).toEqual([]);
+  });
+
+  it("boundary 2.0 IS flagged above (inclusive)", () => {
+    // 12 months of 100L then exactly 200L → ratio = 2.0 exactly → should flag
+    const litres = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 200];
+    const readings = buildReadingsForSequence(litres, 2020, 1);
+    const flags = detectAnomalies(readings);
+    const aboveFlag = flags.find((f: AnomalyFlag) => f.direction === "above");
+    expect(aboveFlag).toBeDefined();
+    expect(aboveFlag!.multiplier).toBe(2.0);
+  });
+
+  it("boundary 0.5 IS flagged below (inclusive)", () => {
+    // 12 months of 100L then exactly 50L → ratio = 0.5 exactly → should flag
+    const litres = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 50];
+    const readings = buildReadingsForSequence(litres, 2020, 1);
+    const flags = detectAnomalies(readings);
+    const belowFlag = flags.find((f: AnomalyFlag) => f.direction === "below");
+    expect(belowFlag).toBeDefined();
+    expect(belowFlag!.multiplier).toBe(0.5);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// computeYearStats with precomputed monthly
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("computeYearStats with precomputed monthly", () => {
+  it("computeYearStats with and without precomputedMonthly returns identical results", () => {
+    const readings: R[] = [
+      r("2023-01-01", 100),
+      r("2023-06-01", 80),
+      r("2024-01-01", 90),
+      r("2024-06-01", 65),
+    ];
+    const purchases: P[] = [p("2023-03-01", 500, 320), p("2024-03-01", 500, 340)];
+    const temps: T[] = [];
+    const precomputed = computeMonthlyUsage(readings);
+    const withoutPrecomputed = computeYearStats(readings, purchases, temps);
+    const withPrecomputed = computeYearStats(readings, purchases, temps, precomputed);
+    expect(withPrecomputed).toEqual(withoutPrecomputed);
+  });
+
+  it("computeYearStats uses precomputed monthly when supplied (not re-computing)", () => {
+    const readings: R[] = [
+      r("2024-01-01", 100),
+      r("2024-06-01", 80),
+    ];
+    const purchases: P[] = [p("2024-03-01", 500, 320)];
+    const temps: T[] = [];
+
+    // Fabricated precomputed: one entry for a year that has no actual readings
+    const fabricated = [{ year: "2099", month: 1, litres: 9999 }];
+    const result = computeYearStats(readings, purchases, temps, fabricated);
+
+    // If precomputed was used, the result should contain the fabricated year 2099
+    const year2099 = result.find((s) => s.label === "2099");
+    expect(year2099).toBeDefined();
+    expect(year2099!.totalLitres).toBe(9999);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// detectAnomalies with precomputed monthly
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("detectAnomalies with precomputed monthly", () => {
+  it("detectAnomalies with and without precomputedMonthly returns identical results", () => {
+    const litres = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 350];
+    const readings = buildReadingsForSequence(litres, 2020, 1);
+    const precomputed = computeMonthlyUsage(readings);
+    const withoutPrecomputed = detectAnomalies(readings);
+    const withPrecomputed = detectAnomalies(readings, precomputed);
+    expect(withPrecomputed).toEqual(withoutPrecomputed);
+  });
+
+  it("detectAnomalies uses precomputed monthly when supplied (not re-computing)", () => {
+    // Readings: flat 100L/month for 2 years (no anomalies)
+    const litres = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100];
+    const readings = buildReadingsForSequence(litres, 2020, 1);
+
+    // Fabricated precomputed: same steady sequence except last month is 500L (anomaly)
+    const genuine = computeMonthlyUsage(readings);
+    const fabricated = genuine.map((m, i) =>
+      i === genuine.length - 1 ? { ...m, litres: 500 } : m
+    );
+
+    const withFabricated = detectAnomalies(readings, fabricated);
+    // Should detect the fabricated anomaly (500 vs median ~100 = 5× above)
+    const aboveFlag = withFabricated.find((f: AnomalyFlag) => f.direction === "above");
+    expect(aboveFlag).toBeDefined();
+
+    // Without fabrication, no anomaly expected
+    const withoutFabricated = detectAnomalies(readings);
+    expect(withoutFabricated).toEqual([]);
   });
 });

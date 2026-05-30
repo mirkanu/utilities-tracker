@@ -20,8 +20,8 @@
 
 ### v1.1 Analytics & Insights
 
-- [ ] **Phase 6: Multi-Year Chart** - Oil chart shows overlaid lines per year/season with calendar vs heating-season toggle
-- [ ] **Phase 7: Temperature Layer** - Open-Meteo temperature overlay on chart + HDD calculation for normalised metrics
+- [x] **Phase 6: Multi-Year Chart** - Oil chart shows overlaid lines per year/season with calendar vs heating-season toggle — completed 2026-05-29
+- [x] **Phase 7: Temperature Layer** - Open-Meteo temperature overlay on chart + HDD calculation for normalised metrics — completed 2026-05-30
 - [ ] **Phase 8: Analytics Page** - New Analytics tab with YoY comparison, projected spend, and refill pattern cards
 - [ ] **Phase 9: Anomaly Detection & Market Pricing** - Consumption anomaly flags + paid p/L vs BEIS market average per purchase
 

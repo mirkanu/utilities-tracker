@@ -16,6 +16,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { DeleteDialog } from "@/components/oil/delete-dialog";
+import { MarketBadge } from "@/components/oil/market-badge";
 import { addOilPurchase, deleteOilPurchase } from "@/actions/oil";
 
 const PAGE_SIZE = 10;
@@ -61,7 +62,15 @@ function SubmitButton() {
   );
 }
 
-export function PurchasesSection({ initialPurchases, lastSupplier = "" }: { initialPurchases: Purchase[]; lastSupplier?: string }) {
+export function PurchasesSection({
+  initialPurchases,
+  lastSupplier = "",
+  beisPrices = {},
+}: {
+  initialPurchases: Purchase[];
+  lastSupplier?: string;
+  beisPrices?: Record<string, number>;
+}) {
   const [shown, setShown] = useState(PAGE_SIZE);
   const [deletedIds, setDeletedIds] = useState<Set<number>>(new Set());
   const [deleteTarget, setDeleteTarget] = useState<Purchase | null>(null);
@@ -210,6 +219,11 @@ export function PurchasesSection({ initialPurchases, lastSupplier = "" }: { init
         <div className="divide-y divide-border">
           {visible.map((p) => {
             const ppl = calcPpl(p.totalCostGbp, p.litres);
+            const monthKey = p.purchaseDate.slice(0, 7);
+            const beisPpl = beisPrices[monthKey] ?? null;
+            const litresNum = parseFloat(p.litres);
+            const costNum = parseFloat(p.totalCostGbp);
+            const paidPplNum = litresNum > 0 ? (costNum / litresNum) * 100 : NaN;
             return (
               <div key={p.id} className="flex items-center justify-between py-3">
                 <div className="flex-1">
@@ -225,6 +239,9 @@ export function PurchasesSection({ initialPurchases, lastSupplier = "" }: { init
                       {[p.supplier, ppl].filter(Boolean).join(" · ")}
                     </p>
                   )}
+                  <div className="mt-1">
+                    <MarketBadge paidPpl={paidPplNum} beisPpl={beisPpl} />
+                  </div>
                 </div>
                 <button
                   onClick={() => setDeleteTarget(p)}

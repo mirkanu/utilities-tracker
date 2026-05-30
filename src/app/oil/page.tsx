@@ -7,6 +7,7 @@ import { MultiYearTankChart } from "@/components/oil/multi-year-tank-chart";
 import { ReadingsSection } from "@/components/oil/readings-section";
 import { PurchasesSection } from "@/components/oil/purchases-section";
 import { fetchTemperatures, type DailyTemp } from "@/lib/temperature-fetch";
+import { fetchBeisPrices } from "@/lib/beis-fetch";
 
 export default async function OilPage() {
   // Fetch readings and purchases in parallel
@@ -27,6 +28,14 @@ export default async function OilPage() {
   } catch (err) {
     console.error("[oil/page] fetchTemperatures failed; rendering chart without temperature overlay:", err);
     temperatures = [];
+  }
+
+  let beisPrices: Record<string, number> = {};
+  try {
+    beisPrices = await fetchBeisPrices();
+  } catch (err) {
+    console.error("[oil/page] fetchBeisPrices failed; market badges will be hidden:", err);
+    beisPrices = {};
   }
 
   // Compute depletion server-side (pure function — no extra DB call)
@@ -79,6 +88,7 @@ export default async function OilPage() {
           supplier: p.supplier ?? null,
         }))}
         lastSupplier={purchases.find((p) => p.supplier)?.supplier ?? ""}
+        beisPrices={beisPrices}
       />
     </div>
   );

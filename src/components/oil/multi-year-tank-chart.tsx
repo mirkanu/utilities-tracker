@@ -28,7 +28,6 @@ import { GroupingToggle } from "./grouping-toggle";
 import { ViewToggle, type ChartView } from "./view-toggle";
 import { MonthlyUsageChart } from "./monthly-usage-chart";
 import { AnnualUsageChart } from "./annual-usage-chart";
-import { TemperatureToggle } from "./temperature-toggle";
 import type { DailyTemp } from "@/lib/temperature-fetch";
 
 interface Props {
@@ -175,9 +174,10 @@ function RawViewContent({
 export function MultiYearTankChart({ readings, purchases, temperatures }: Props) {
   const [view, setView] = useState<ChartView>("raw");
   const [groupingMode, setGroupingMode] = useState<GroupingMode>("calendar");
-  const [showTemp, setShowTemp] = useState(false);
 
   if (readings.length === 0) return null;
+
+  const showTemp = temperatures.length > 0;
 
   return (
     <div className="space-y-2">
@@ -185,14 +185,6 @@ export function MultiYearTankChart({ readings, purchases, temperatures }: Props)
 
       {view === "annual" && (
         <GroupingToggle value={groupingMode} onChange={setGroupingMode} />
-      )}
-
-      {(view === "monthly" || view === "annual") && (
-        <TemperatureToggle
-          value={showTemp}
-          onChange={setShowTemp}
-          disabled={temperatures.length === 0}
-        />
       )}
 
       {view === "raw" && (

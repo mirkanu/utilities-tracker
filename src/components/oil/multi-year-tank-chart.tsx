@@ -113,7 +113,7 @@ function RawViewContent({
             tick={{ fontSize: 11 }}
             tickFormatter={tickFormatter}
           />
-          <YAxis tickLine={false} axisLine={false} tick={<YAxisTick />} width={60} />
+          <YAxis tickLine={false} axisLine={false} tick={<YAxisTick />} width={48} />
           <ChartTooltip
             content={
               <ChartTooltipContent

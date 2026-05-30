@@ -86,7 +86,7 @@ export function AnnualUsageChart({ readings, mode, temperatures, showTemp }: Pro
             axisLine={false}
             tick={{ fontSize: 11 }}
             width={60}
-            label={{ value: "Consumption (L/year)", angle: -90, position: "insideLeft", offset: 14, style: { textAnchor: "middle", fontSize: 9, fill: "hsl(var(--muted-foreground))" } }}
+            label={{ value: "Consumption (L/year)", angle: -90, position: "insideLeft", offset: 14, style: { textAnchor: "middle", fontSize: 9, fill: "var(--muted-foreground)" } }}
           />
           {showTemp && (
             <YAxis
@@ -102,10 +102,10 @@ export function AnnualUsageChart({ readings, mode, temperatures, showTemp }: Pro
           <ChartTooltip
             content={
               <ChartTooltipContent
-                formatter={(value: unknown, _name) => [
-                  `${value} L`,
-                  mode === "calendar" ? "Calendar Year" : "Heating Season",
-                ]}
+                formatter={(value: unknown, name) => {
+                  if (name === "totalHdd") return [`${value} HDD`, "Heating Degree Days"];
+                  return [`${value} L`, mode === "calendar" ? "Calendar Year" : "Heating Season"];
+                }}
               />
             }
           />

@@ -85,7 +85,7 @@ function assert(cond, msg) {
 
   // ---- Test 5: Back to Raw — toggle disappears ----
   console.log('\n--- Test 5: Back to Raw — toggle hidden again ---');
-  await page.getByRole('button', { name: 'Raw' }).click();
+  await page.getByRole('button', { name: 'Readings' }).click();
   await page.waitForTimeout(300);
   const rawAgainCount = await page.locator('button[aria-label="Show temperature overlay"]').count();
   assert(rawAgainCount === 0, 'Temperature toggle is HIDDEN again after returning to Raw view');

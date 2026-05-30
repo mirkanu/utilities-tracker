@@ -94,7 +94,7 @@ export function MonthlyUsageChart({ readings, temperatures, showTemp }: Props) {
             axisLine={false}
             tick={{ fontSize: 11 }}
             width={60}
-            label={{ value: "Consumption (L/month)", angle: -90, position: "insideLeft", offset: 14, style: { textAnchor: "middle", fontSize: 9, fill: "hsl(var(--muted-foreground))" } }}
+            label={{ value: "Consumption (L/month)", angle: -90, position: "insideLeft", offset: 14, style: { textAnchor: "middle", fontSize: 9, fill: "var(--muted-foreground)" } }}
           />
           {showTemp && (
             <YAxis
@@ -106,14 +106,17 @@ export function MonthlyUsageChart({ readings, temperatures, showTemp }: Props) {
               tickLine={false}
               axisLine={false}
               tick={{ fontSize: 11 }}
-              label={{ value: "Avg. monthly temp.", angle: 90, position: "insideRight", offset: 12, style: { textAnchor: "middle", fontSize: 9, fill: "hsl(var(--muted-foreground))" } }}
+              label={{ value: "Avg. monthly temp.", angle: 90, position: "insideRight", offset: 12, style: { textAnchor: "middle", fontSize: 9, fill: "var(--muted-foreground)" } }}
             />
           )}
           <ChartTooltip
             content={
               <ChartTooltipContent
                 labelFormatter={(label) => MONTH_LONG[Number(label) - 1] ?? String(label)}
-                formatter={(value: unknown, name) => [`${value} L`, String(name)]}
+                formatter={(value: unknown, name) => {
+                  if (name === "avgTempC") return [`${value}°C`, "Avg. temp."];
+                  return [`${value} L`, String(name)];
+                }}
               />
             }
           />
@@ -141,7 +144,7 @@ export function MonthlyUsageChart({ readings, temperatures, showTemp }: Props) {
               strokeDasharray="6 3"
               opacity={0.8}
               dot={false}
-              connectNulls={false}
+              connectNulls={true}
               isAnimationActive={false}
             />
           )}

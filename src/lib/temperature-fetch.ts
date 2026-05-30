@@ -1,7 +1,7 @@
 import "server-only";
 import { db } from "@/lib/db/db";
 import { dailyTemperatures } from "@/lib/db/schema";
-import { desc, asc, between, sql } from "drizzle-orm";
+import { asc, between, sql } from "drizzle-orm";
 
 export type DailyTemp = {
   date: string;       // "YYYY-MM-DD"
@@ -70,14 +70,21 @@ export async function fetchTemperatures(
 ): Promise<DailyTemp[]> {
   const today = londonToday();
 
-  const lastFetch = await db
-    .select({ fetchedAt: dailyTemperatures.fetchedAt })
-    .from(dailyTemperatures)
-    .orderBy(desc(dailyTemperatures.fetchedAt))
-    .limit(1);
+  // Cache guard: skip fetch only when we've already fetched today AND we have
+  // coverage from at least startDate (covers the case where new historical readings
+  // extend the range backward after a previous fetch).
+  const coverage = await db
+    .select({
+      minDate: sql<string>`MIN(date)`,
+      latestFetch: sql<string>`MAX(fetched_at)`,
+    })
+    .from(dailyTemperatures);
 
-  const alreadyFetchedToday = lastFetch[0]?.fetchedAt === today;
-  if (!alreadyFetchedToday) {
+  const hasTodayFetch = coverage[0]?.latestFetch === today;
+  const hasStartCoverage =
+    coverage[0]?.minDate != null && coverage[0].minDate <= startDate;
+
+  if (!hasTodayFetch || !hasStartCoverage) {
     await refreshFromOpenMeteo(startDate, endDate);
   }
 

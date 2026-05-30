@@ -9,15 +9,19 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import { computeMonthlyUsage, type YearMeta } from "@/lib/oil-chart-grouping";
+import type { DailyTemp } from "@/lib/temperature-fetch";
+import { aggregateMonthlyTemp } from "@/lib/temperature-utils";
 
 interface Props {
   readings: { readingDate: string; heightCm: number }[];
+  temperatures: DailyTemp[];
+  showTemp: boolean;
 }
 
 const MONTH_SHORT = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const MONTH_LONG  = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
-export function MonthlyUsageChart({ readings }: Props) {
+export function MonthlyUsageChart({ readings, temperatures, showTemp }: Props) {
   const { merged, years, chartConfig } = useMemo(() => {
     if (readings.length === 0) {
       return { merged: [], years: [] as YearMeta[], chartConfig: {} as ChartConfig };
@@ -51,21 +55,27 @@ export function MonthlyUsageChart({ readings }: Props) {
       byMonthMap.get(p.month)![p.year] = p.litres;
     }
 
+    // Compute monthly temperature lookup when showTemp is enabled
+    const tempByMonth = showTemp
+      ? new Map(aggregateMonthlyTemp(temperatures).map((t) => [t.month, t.avgTempC]))
+      : new Map<number, number>();
+
     // Ensure all 12 months are present in the array (so x-axis is complete)
     const mergedArr = Array.from({ length: 12 }, (_, i) => {
       const month = i + 1;
-      return byMonthMap.get(month) ?? { month };
+      const base = byMonthMap.get(month) ?? { month };
+      return showTemp ? { ...base, avgTempC: tempByMonth.get(month) } : base;
     });
 
     return { merged: mergedArr, years: yearMetas, chartConfig: config };
-  }, [readings]);
+  }, [readings, temperatures, showTemp]);
 
   if (readings.length === 0) return null;
 
   return (
     <div className="space-y-2">
-      <ChartContainer config={chartConfig} className="h-[260px] w-full">
-        <LineChart data={merged} margin={{ top: 20, right: 8, left: 0, bottom: 0 }}>
+      <ChartContainer config={chartConfig} className="h-[300px] w-full">
+        <LineChart data={merged} margin={{ top: 20, right: showTemp ? 48 : 8, left: 0, bottom: 0 }}>
           <CartesianGrid vertical={false} strokeOpacity={0.3} />
           <XAxis
             dataKey="month"
@@ -78,12 +88,25 @@ export function MonthlyUsageChart({ readings }: Props) {
             tick={{ fontSize: 11 }}
           />
           <YAxis
+            yAxisId="left"
             tickFormatter={(v) => `${v}L`}
             tickLine={false}
             axisLine={false}
             tick={{ fontSize: 11 }}
             width={50}
           />
+          {showTemp && (
+            <YAxis
+              yAxisId="temp"
+              orientation="right"
+              domain={["auto", "auto"]}
+              tickFormatter={(v) => `${v}°`}
+              width={40}
+              tickLine={false}
+              axisLine={false}
+              tick={{ fontSize: 11 }}
+            />
+          )}
           <ChartTooltip
             content={
               <ChartTooltipContent
@@ -95,6 +118,7 @@ export function MonthlyUsageChart({ readings }: Props) {
           {years.map((y) => (
             <Line
               key={y.label}
+              yAxisId="left"
               type="monotone"
               dataKey={y.label}
               stroke={`var(--year-color-${y.colorIndex})`}
@@ -105,6 +129,20 @@ export function MonthlyUsageChart({ readings }: Props) {
               isAnimationActive={false}
             />
           ))}
+          {showTemp && (
+            <Line
+              dataKey="avgTempC"
+              yAxisId="temp"
+              type="monotone"
+              stroke="var(--temp-color)"
+              strokeWidth={1.5}
+              strokeDasharray="6 3"
+              opacity={0.8}
+              dot={false}
+              connectNulls={false}
+              isAnimationActive={false}
+            />
+          )}
         </LineChart>
       </ChartContainer>
 
@@ -120,6 +158,16 @@ export function MonthlyUsageChart({ readings }: Props) {
             <span className="text-muted-foreground">{y.label}</span>
           </div>
         ))}
+        {showTemp && (
+          <div className="flex items-center gap-2">
+            <span
+              aria-hidden="true"
+              className="inline-block h-3 w-3 rounded-sm"
+              style={{ backgroundColor: "var(--temp-color)" }}
+            />
+            <span className="text-muted-foreground">Temperature</span>
+          </div>
+        )}
       </div>
     </div>
   );

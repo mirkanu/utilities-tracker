@@ -28,10 +28,13 @@ import { GroupingToggle } from "./grouping-toggle";
 import { ViewToggle, type ChartView } from "./view-toggle";
 import { MonthlyUsageChart } from "./monthly-usage-chart";
 import { AnnualUsageChart } from "./annual-usage-chart";
+import { TemperatureToggle } from "./temperature-toggle";
+import type { DailyTemp } from "@/lib/temperature-fetch";
 
 interface Props {
   readings: { readingDate: string; heightCm: number }[];
   purchases: { purchaseDate: string }[];
+  temperatures: DailyTemp[];
 }
 
 // Custom Y-axis tick: shifts the anchor right by 20px so numbers don't clip
@@ -169,9 +172,10 @@ function RawViewContent({
   );
 }
 
-export function MultiYearTankChart({ readings, purchases }: Props) {
+export function MultiYearTankChart({ readings, purchases, temperatures }: Props) {
   const [view, setView] = useState<ChartView>("raw");
   const [groupingMode, setGroupingMode] = useState<GroupingMode>("calendar");
+  const [showTemp, setShowTemp] = useState(false);
 
   if (readings.length === 0) return null;
 
@@ -183,14 +187,22 @@ export function MultiYearTankChart({ readings, purchases }: Props) {
         <GroupingToggle value={groupingMode} onChange={setGroupingMode} />
       )}
 
+      {(view === "monthly" || view === "annual") && (
+        <TemperatureToggle
+          value={showTemp}
+          onChange={setShowTemp}
+          disabled={temperatures.length === 0}
+        />
+      )}
+
       {view === "raw" && (
         <RawViewContent readings={readings} purchases={purchases} mode={groupingMode} />
       )}
       {view === "monthly" && (
-        <MonthlyUsageChart readings={readings} />
+        <MonthlyUsageChart readings={readings} temperatures={temperatures} showTemp={showTemp} />
       )}
       {view === "annual" && (
-        <AnnualUsageChart readings={readings} mode={groupingMode} />
+        <AnnualUsageChart readings={readings} mode={groupingMode} temperatures={temperatures} showTemp={showTemp} />
       )}
     </div>
   );

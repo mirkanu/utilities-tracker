@@ -101,7 +101,6 @@ export function AnnualUsageChart({ readings, mode, temperatures, showTemp }: Pro
               tickLine={false}
               axisLine={false}
               tick={{ fontSize: 11 }}
-              label={{ value: "Heating Degree Days", angle: 90, position: "insideRight", offset: 12, style: { textAnchor: "middle", fontSize: 9, fill: "var(--muted-foreground)" } }}
             />
           )}
           <ChartTooltip
@@ -148,9 +147,9 @@ export function AnnualUsageChart({ readings, mode, temperatures, showTemp }: Pro
               type="button"
               aria-label="What are Heating Degree Days?"
               onClick={() => setShowHddInfo((v) => !v)}
-              className="text-muted-foreground hover:text-foreground active:scale-95 transition-transform"
+              className="flex items-center justify-center min-w-[44px] min-h-[44px] -m-2 text-muted-foreground hover:text-foreground active:scale-95 transition-transform"
             >
-              <Info className="h-3.5 w-3.5" />
+              <Info className="h-4 w-4" />
             </button>
           </div>
           {showHddInfo && (

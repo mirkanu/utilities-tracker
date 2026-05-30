@@ -75,7 +75,7 @@ export function MonthlyUsageChart({ readings, temperatures, showTemp }: Props) {
   return (
     <div className="space-y-2">
       <ChartContainer config={chartConfig} className="h-[300px] w-full">
-        <LineChart data={merged} margin={{ top: 20, right: showTemp ? 48 : 8, left: 0, bottom: 0 }}>
+        <LineChart data={merged} margin={{ top: 20, right: 8, left: 0, bottom: 0 }}>
           <CartesianGrid vertical={false} strokeOpacity={0.3} />
           <XAxis
             dataKey="month"
@@ -102,7 +102,7 @@ export function MonthlyUsageChart({ readings, temperatures, showTemp }: Props) {
               orientation="right"
               domain={["auto", "auto"]}
               tickFormatter={(v) => `${v}°`}
-              width={55}
+              width={40}
               tickLine={false}
               axisLine={false}
               tick={{ fontSize: 11 }}

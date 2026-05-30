@@ -36,14 +36,13 @@ interface Props {
   temperatures: DailyTemp[];
 }
 
-// Custom Y-axis tick: shifts the anchor right by 20px so numbers don't clip
-// against the SVG left boundary. Recharts hardcodes tspan x, so dx on the
-// outer <text> is ignored — we must override x in a custom renderer.
+// Custom Y-axis tick: positions text 4px inside the right edge of the axis band.
+// Recharts hardcodes tspan x, so dx on the outer <text> is ignored — we must override x.
 function YAxisTick({ x = 0, y = 0, payload }: { x?: number; y?: number; payload?: { value: number } }) {
   const litres = payload ? cmToLitres(payload.value) : null;
   return (
     <text
-      x={x + 20}
+      x={x - 4}
       y={y}
       textAnchor="end"
       fill="var(--muted-foreground)"
@@ -51,7 +50,7 @@ function YAxisTick({ x = 0, y = 0, payload }: { x?: number; y?: number; payload?
     >
       <tspan dy="-0.2em" fontSize={11}>{payload?.value}cm</tspan>
       {litres !== null && (
-        <tspan x={x + 20} dy="1.3em" fontSize={10} opacity={0.7}>~{litres}L</tspan>
+        <tspan x={x - 4} dy="1.3em" fontSize={10} opacity={0.7}>~{litres}L</tspan>
       )}
     </text>
   );

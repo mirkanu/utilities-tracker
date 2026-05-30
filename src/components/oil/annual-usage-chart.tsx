@@ -71,7 +71,7 @@ export function AnnualUsageChart({ readings, mode, temperatures, showTemp }: Pro
   return (
     <div className="space-y-2">
       <ChartContainer config={chartConfig} className="h-[300px] w-full">
-        <ComposedChart data={bars} margin={{ top: 20, right: showTemp ? 58 : 8, left: 0, bottom: 0 }}>
+        <ComposedChart data={bars} margin={{ top: 20, right: 8, left: 0, bottom: 0 }}>
           <CartesianGrid vertical={false} strokeOpacity={0.3} />
           <XAxis
             dataKey="label"
@@ -94,7 +94,7 @@ export function AnnualUsageChart({ readings, mode, temperatures, showTemp }: Pro
               yAxisId="temp"
               orientation="right"
               tickFormatter={(v) => `${v}`}
-              width={42}
+              width={36}
               tickLine={false}
               axisLine={false}
               tick={{ fontSize: 11 }}

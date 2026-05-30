@@ -39,13 +39,13 @@ See at a glance how much oil and electricity you're using, know when the oil wil
 - ✓ Toggle between calendar year (Jan–Dec) and heating season (Oct–Sep) groupings — v1.1 (Phase 6)
 - ✓ Monthly consumption view (L/month per year overlaid) — v1.1 (Phase 6)
 - ✓ Annual consumption view (L/year or L/season bar chart) — v1.1 (Phase 6)
-- [ ] Historical temperature overlay on the oil chart (Open-Meteo, Broughshane NI)
-- [ ] Heating Degree Days (HDD, base 15.5°C) calculated per period for normalised analytics
-- [ ] New Analytics tab (/analytics route, 4th tab in bottom nav)
-- [ ] Year-over-year comparison cards (total L, total £, L/day, and HDD-normalised L/HDD)
+- ✓ Historical temperature overlay on the oil chart (Open-Meteo, Broughshane NI) — v1.1 (Phase 7)
+- ✓ Heating Degree Days (HDD, base 15.5°C) calculated per period for normalised analytics — v1.1 (Phase 7)
+- ✓ New Analytics tab (/analytics route, 4th tab in bottom nav) — v1.1 (Phase 8)
+- ✓ Year-over-year comparison cards (total L, total £, L/day, and HDD-normalised L/HDD) — v1.1 (Phase 8)
+- ✓ Projected annual spend at current L/day rate (litres + £) — v1.1 (Phase 8)
+- ✓ Refill pattern analysis (avg days between purchases, trend over time) — v1.1 (Phase 8)
 - [ ] Consumption anomaly detection (weeks/months running 2× above/below rolling baseline)
-- [ ] Projected annual spend at current L/day rate (litres + £)
-- [ ] Refill pattern analysis (avg days between purchases, trend over time)
 - [ ] Paid p/L vs BEIS UK domestic heating oil market price at each purchase date
 
 ### Out of Scope
@@ -123,4 +123,4 @@ See at a glance how much oil and electricity you're using, know when the oil wil
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-29 — Phase 6 complete (three-view oil chart shipped)*
+*Last updated: 2026-05-30 — Phase 8 complete (Analytics page shipped — YoY cards, projected spend, refill pattern)*

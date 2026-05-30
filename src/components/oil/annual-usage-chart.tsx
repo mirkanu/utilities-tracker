@@ -75,6 +75,7 @@ export function AnnualUsageChart({ readings, mode, temperatures, showTemp }: Pro
           <CartesianGrid vertical={false} strokeOpacity={0.3} />
           <XAxis
             dataKey="label"
+            type="category"
             tickLine={false}
             axisLine={false}
             tick={{ fontSize: 11 }}
@@ -138,10 +139,7 @@ export function AnnualUsageChart({ readings, mode, temperatures, showTemp }: Pro
               className="inline-block h-3 w-3 rounded-sm"
               style={{ backgroundColor: "var(--temp-color)" }}
             />
-            <span
-              className="text-muted-foreground border-b border-dotted border-muted-foreground/60 cursor-help"
-              title="Heating Degree Days: a measure of heating demand. One HDD = one day where the average temperature is 1°C below 15.5°C base. Higher = colder period."
-            >HDD</span>
+            <span className="text-muted-foreground">HDD — Heating Degree Days</span>
           </div>
         </div>
       )}

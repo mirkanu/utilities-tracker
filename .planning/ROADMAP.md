@@ -71,7 +71,10 @@
   2. The analytics page shows one comparison card per year/heating season containing total litres, total £, average L/day, and L/HDD — the HDD figure uses the Open-Meteo data from Phase 7
   3. A projected spend card shows the estimated litres and £ for the current full year/season at the current L/day rate, with the number of days remaining in the period
   4. A refill pattern section shows the average interval between oil purchases, whether that interval is trending shorter or longer, and an estimated date for the next required refill
-**Plans**: TBD
+**Plans**: 3 plans
+  - [ ] 08-01-PLAN.md — oil-analytics.ts pure computation library + unit tests (TDD)
+  - [ ] 08-02-PLAN.md — BottomNav 4th tab + /analytics route shell + loading.tsx
+  - [ ] 08-03-PLAN.md — Card components + wire server component + Playwright E2E
 **UI hint**: yes
 
 ### Phase 9: Anomaly Detection & Market Pricing

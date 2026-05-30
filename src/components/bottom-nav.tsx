@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { House, Droplets, Zap } from "lucide-react";
+import { House, Droplets, Zap, BarChart3 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const tabs = [
   { href: "/", label: "Home", icon: House },
   { href: "/oil", label: "Oil", icon: Droplets },
   { href: "/electricity", label: "Electricity", icon: Zap },
+  { href: "/analytics", label: "Analytics", icon: BarChart3 },
 ] as const;
 
 export function BottomNav() {
@@ -20,7 +21,7 @@ export function BottomNav() {
       className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background pb-safe"
       aria-label="Main navigation"
     >
-      <div className="grid grid-cols-3 h-16">
+      <div className="grid grid-cols-4 h-16">
         {tabs.map(({ href, label, icon: Icon }) => {
           const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
           return (

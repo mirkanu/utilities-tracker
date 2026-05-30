@@ -87,8 +87,8 @@
   3. BEIS price data is fetched and stored (or server-side cached) from the gov.uk CSV source and kept reasonably current without manual action
   4. The full analytics flow passes a Playwright E2E verification — chart renders, anomaly flags appear for seeded data, market comparison indicators display on purchase entries
 **Plans**: 4 plans
-  - [ ] 09-01-PLAN.md — TDD: detectAnomalies + shared precomputedMonthly param on computeYearStats and detectAnomalies (ANAL-03)
-  - [ ] 09-02-PLAN.md — beis_monthly_prices Drizzle migration + [BLOCKING] schema push + fetchBeisPrices service (ANAL-06 data layer)
+  - [x] 09-01-PLAN.md — TDD: detectAnomalies + shared precomputedMonthly param on computeYearStats and detectAnomalies (ANAL-03)
+  - [x] 09-02-PLAN.md — beis_monthly_prices Drizzle migration + [BLOCKING] schema push + fetchBeisPrices service (ANAL-06 data layer)
   - [ ] 09-03-PLAN.md — AnomalyFlagsSection + MarketBadge + page wiring (ANAL-03, ANAL-06 — static integration)
   - [ ] 09-04-PLAN.md — Daemon-routed Playwright E2E + human-verify checkpoint (ANAL-03, ANAL-06 — live verification)
 **UI hint**: yes

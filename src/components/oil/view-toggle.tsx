@@ -9,7 +9,7 @@ interface ViewToggleProps {
 
 export function ViewToggle({ value, onChange }: ViewToggleProps) {
   const options: { id: ChartView; label: string }[] = [
-    { id: "raw",     label: "Raw" },
+    { id: "raw",     label: "Readings" },
     { id: "monthly", label: "Monthly" },
     { id: "annual",  label: "Annual" },
   ];

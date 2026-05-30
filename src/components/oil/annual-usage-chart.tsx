@@ -85,15 +85,18 @@ export function AnnualUsageChart({ readings, mode, temperatures, showTemp }: Pro
             tickLine={false}
             axisLine={false}
             tick={{ fontSize: 11 }}
-            width={50}
+            width={60}
+            label={{ value: "Consumption (L/year)", angle: -90, position: "insideLeft", offset: 14, style: { textAnchor: "middle", fontSize: 9, fill: "hsl(var(--muted-foreground))" } }}
           />
           {showTemp && (
             <YAxis
               yAxisId="temp"
               orientation="right"
               tickFormatter={(v) => `${v}`}
-              label={{ value: "HDD (base 15.5°C)", angle: -90, position: "insideRight", fontSize: 10 }}
-              width={50}
+              width={42}
+              tickLine={false}
+              axisLine={false}
+              tick={{ fontSize: 11 }}
             />
           )}
           <ChartTooltip
@@ -135,7 +138,10 @@ export function AnnualUsageChart({ readings, mode, temperatures, showTemp }: Pro
               className="inline-block h-3 w-3 rounded-sm"
               style={{ backgroundColor: "var(--temp-color)" }}
             />
-            <span className="text-muted-foreground">HDD (heating degree days)</span>
+            <span
+              className="text-muted-foreground border-b border-dotted border-muted-foreground/60 cursor-help"
+              title="Heating Degree Days: a measure of heating demand. One HDD = one day where the average temperature is 1°C below 15.5°C base. Higher = colder period."
+            >HDD</span>
           </div>
         </div>
       )}

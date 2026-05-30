@@ -16,11 +16,12 @@ export function MarketBadge({ paidPpl, beisPpl }: Props) {
   const above = delta > 0;
   const absDelta = Math.abs(delta).toFixed(1);
   const beisRounded = beisPpl.toFixed(1);
+  const pct = Math.round((Math.abs(delta) / beisPpl) * 100);
   const Icon = above ? ArrowUp : ArrowDown;
   const colorClass = above ? "text-destructive" : "text-green-600 dark:text-green-400";
   const label = above
-    ? `${absDelta}p above market avg (${beisRounded}p)`
-    : `${absDelta}p below market avg (${beisRounded}p)`;
+    ? `${absDelta}p (${pct}%) above market avg (${beisRounded}p)`
+    : `${absDelta}p (${pct}%) below market avg (${beisRounded}p)`;
 
   return (
     <span className={cn("text-xs inline-flex items-center gap-1", colorClass)}>

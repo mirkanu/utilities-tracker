@@ -94,6 +94,7 @@ None yet.
 | 260528-b | Oil chart: dots with dashed connecting lines (replace continuous solid line) | 2026-05-28 | 4ab20a1 | — |
 | 260528-c | Add visible field labels to all log popups (oil readings, oil purchases, elec readings, bills, contract) | 2026-05-28 | a618938 | — |
 | 260528-d | Electricity: standing charge (p/day) on contract; billing period start/end dates replacing billing month; auto-calculated cost | 2026-05-28 | 112bec2 | — |
+| 260530-e5s | Phase 7 temperature overlay fixes: always-on temp, annual x-axis labels, HDD definition, Readings mobile padding | 2026-05-30 | 6407970 | [260530-e5s-phase-7-temperature-layer-fixes](./quick/260530-e5s-phase-7-temperature-layer-fixes/) |
 
 ## Deferred Items
 
@@ -105,6 +106,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-05-30T08:22:08.568Z
-Stopped at: Phase 7 UI-SPEC approved
+Last session: 2026-05-30
+Stopped at: Quick task 260530-e5s complete — Phase 7 temperature overlay fixes applied and live
 Resume file: None

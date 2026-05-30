@@ -97,10 +97,11 @@ export function AnnualUsageChart({ readings, mode, temperatures, showTemp }: Pro
               yAxisId="temp"
               orientation="right"
               tickFormatter={(v) => `${v}`}
-              width={36}
+              width={52}
               tickLine={false}
               axisLine={false}
               tick={{ fontSize: 11 }}
+              label={{ value: "Heating Degree Days", angle: 90, position: "insideRight", offset: 14, style: { textAnchor: "middle", fontSize: 9, fill: "var(--muted-foreground)" } }}
             />
           )}
           <ChartTooltip

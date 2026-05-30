@@ -166,9 +166,10 @@ export function computeProjectedSpend(
   const mostRecent = purchases
     .slice()
     .sort((a, b) => b.purchaseDate.localeCompare(a.purchaseDate))[0];
+  const litresNum = parseFloat(mostRecent.litres as unknown as string);
+  if (!litresNum || litresNum <= 0) return null;
   const pricePerLitre =
-    parseFloat(mostRecent.totalCostGbp as unknown as string) /
-    parseFloat(mostRecent.litres as unknown as string);
+    parseFloat(mostRecent.totalCostGbp as unknown as string) / litresNum;
 
   const projectedGbp = projectedLitres * pricePerLitre;
 

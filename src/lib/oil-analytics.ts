@@ -139,18 +139,25 @@ export function computeProjectedSpend(
 
   const year = todayStr.slice(0, 4);
   const yearEnd = parseLocalDate(year + "-12-31");
-  const todayDate = parseLocalDate(todayStr);
-
-  // 4. Days remaining from today to Dec 31 (inclusive)
-  const daysRemaining = Math.round(
-    (yearEnd.getTime() - todayDate.getTime()) / MS_PER_DAY
-  );
 
   // 5. Litres consumed in current year to date from monthly usage
   const monthly = computeMonthlyUsage(readings);
   const litresConsumedToDate = monthly
     .filter((m) => m.year === year)
     .reduce((s, m) => s + m.litres, 0);
+
+  // 4. Days remaining from the last reading in the current year to Dec 31.
+  // Using today as the handoff would leave a gap (last reading → today) that
+  // falls in neither the accumulated nor the projected term.
+  const currentYearReadings = readings.filter((r) => r.readingDate.startsWith(year));
+  const lastReadingInYear = currentYearReadings.length
+    ? currentYearReadings.map((r) => r.readingDate).sort().at(-1)!
+    : todayStr;
+  const handoffDate = parseLocalDate(lastReadingInYear);
+  const daysRemaining = Math.max(
+    0,
+    Math.round((yearEnd.getTime() - handoffDate.getTime()) / MS_PER_DAY)
+  );
 
   // 6. Projected total litres for the year
   const projectedLitres = litresConsumedToDate + litresPerDay * daysRemaining;

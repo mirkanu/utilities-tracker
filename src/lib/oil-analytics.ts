@@ -227,6 +227,11 @@ export function computeRefillPattern(
     new Date().toLocaleDateString("en-CA", { timeZone: "Europe/London" });
 
   // 7. Estimated next refill date
+  // Guard: avgIntervalDays = 0 (all purchases on same date) would cause an infinite loop.
+  if (avgIntervalDays <= 0) {
+    return { avgIntervalDays, trend, estimatedNextRefillDate: null };
+  }
+
   const lastDate = parseLocalDate(sorted[sorted.length - 1].purchaseDate);
   let estimate = new Date(lastDate.getTime() + avgIntervalDays * MS_PER_DAY);
 

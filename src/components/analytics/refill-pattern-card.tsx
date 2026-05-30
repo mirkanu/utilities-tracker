@@ -41,7 +41,9 @@ export function RefillPatternCard({ pattern }: Props) {
                   pattern.trend === "longer"  ? "Refills getting less frequent" :
                                                 "Refill interval stable";
                 const trendClass =
-                  pattern.trend === "shorter" ? "text-amber-500" : "text-muted-foreground";
+                  pattern.trend === "shorter" ? "text-amber-500" :
+                  pattern.trend === "longer"  ? "text-green-600"  :
+                                                "text-muted-foreground";
                 return (
                   <div className={`flex items-center gap-1 mt-3 ${trendClass}`}>
                     <TrendIcon className="h-4 w-4" aria-hidden="true" />

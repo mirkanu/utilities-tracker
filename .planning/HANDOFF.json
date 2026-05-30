@@ -1,0 +1,39 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-05-30T10:02:49.265Z",
+  "phase": "07",
+  "phase_name": "temperature-layer",
+  "phase_dir": ".planning/phases/07-temperature-layer",
+  "plan": 3,
+  "task": "complete",
+  "total_tasks": "complete",
+  "status": "awaiting_human_approval",
+  "completed_tasks": [
+    {"id": "07-01", "name": "Temperature data layer (schema + fetch + utils)", "status": "done", "commit": "648f74a"},
+    {"id": "07-02", "name": "Chart UI — TemperatureToggle + dual-axis overlays", "status": "done", "commit": "dc75434"},
+    {"id": "07-03", "name": "Oil page wiring + E2E tests", "status": "done", "commit": "e1a2ccd"},
+    {"id": "polish", "name": "UI polish — Readings rename, CY/HS fix, axis labels, HDD tooltip", "status": "done", "commit": "7298a89"},
+    {"id": "review-fixes", "name": "Code review fixes CR-01, CR-02, WR-01–04", "status": "done", "commit": "0a4a38c"}
+  ],
+  "remaining_tasks": [
+    {"id": "uat-approval", "name": "Human approval of 4 HUMAN-UAT.md items", "status": "awaiting_human"},
+    {"id": "phase-complete", "name": "gsd-sdk query phase.complete 07 + commit tracking", "status": "not_started"}
+  ],
+  "blockers": [],
+  "human_actions_pending": [
+    {
+      "action": "Visit https://utilities.gsdlabs.dev/oil and confirm 4 UAT items in 07-HUMAN-UAT.md",
+      "context": "All automated checks pass. Human sign-off required before marking phase complete.",
+      "blocking": true
+    }
+  ],
+  "decisions": [
+    {"decision": "Cache guard checks both fetchedAt=today AND minDate<=startDate", "rationale": "Prevents stale cache when historical readings extend the date range"},
+    {"decision": "GroupingToggle only shown for Annual view", "rationale": "Raw/Readings view has no grouping concept"},
+    {"decision": "var(--muted-foreground) not hsl(var(...))", "rationale": "OKLCH theme — wrapping in hsl() is invalid CSS"},
+    {"decision": "Docker build context is /home/services/utilities", "rationale": "Must rsync dev dir before rebuild"}
+  ],
+  "uncommitted_files": [".planning/phases/06-multi-year-chart/06-REVIEW-FIX.md (untracked, unrelated to phase 7)"],
+  "next_action": "User says 'approved' → gsd-sdk query phase.complete 07 → commit tracking → update PROJECT.md → offer next phase",
+  "context_notes": "Phase 7 fully done. Playwright confirmed live. Only pending item is human UAT sign-off."
+}

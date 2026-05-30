@@ -36,20 +36,19 @@ export function AnomalyFlagsSection({ flags, hasEnoughData }: Props) {
   }
 
   const visible = showAll ? flags : flags.slice(0, 5);
-  const hiddenCount = flags.length - visible.length;
 
   return (
     <div className="space-y-3" role="region" aria-label="Anomalies">
       {visible.map((flag, i) => (
         <AnomalyFlagCard key={`${flag.period}-${i}`} flag={flag} />
       ))}
-      {hiddenCount > 0 && (
+      {flags.length > 5 && (
         <button
           type="button"
-          onClick={() => setShowAll(true)}
+          onClick={() => setShowAll((prev) => !prev)}
           className="text-sm text-muted-foreground active:opacity-70"
         >
-          Show all {flags.length} anomalies
+          {showAll ? "Show fewer" : `Show all ${flags.length} anomalies`}
         </button>
       )}
     </div>

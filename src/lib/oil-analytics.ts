@@ -207,11 +207,12 @@ export function computeRefillPattern(
   const avgIntervalDays =
     Math.round((intervals.reduce((s, x) => s + x, 0) / intervals.length) * 10) / 10;
 
-  // 5. Trend: compare first-half average to second-half average
+  // 5. Trend: compare first-half average to second-half average.
+  // Use slice(-half) so both halves are the same size and the middle element
+  // of an odd-length array is not silently dropped.
   const half = Math.floor(intervals.length / 2);
   const firstHalfAvg = intervals.slice(0, half).reduce((s, x) => s + x, 0) / half;
-  const secondHalfAvg =
-    intervals.slice(intervals.length - half).reduce((s, x) => s + x, 0) / half;
+  const secondHalfAvg = intervals.slice(-half).reduce((s, x) => s + x, 0) / half;
   const trend: "shorter" | "longer" | "stable" =
     secondHalfAvg < firstHalfAvg * 0.9
       ? "shorter"

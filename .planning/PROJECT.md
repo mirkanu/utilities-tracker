@@ -45,8 +45,8 @@ See at a glance how much oil and electricity you're using, know when the oil wil
 - ✓ Year-over-year comparison cards (total L, total £, L/day, and HDD-normalised L/HDD) — v1.1 (Phase 8)
 - ✓ Projected annual spend at current L/day rate (litres + £) — v1.1 (Phase 8)
 - ✓ Refill pattern analysis (avg days between purchases, trend over time) — v1.1 (Phase 8)
-- [ ] Consumption anomaly detection (weeks/months running 2× above/below rolling baseline)
-- [ ] Paid p/L vs BEIS UK domestic heating oil market price at each purchase date
+- ✓ Consumption anomaly detection (rolling 12-month median, 2×/0.5× thresholds, flagged on /analytics) — v1.1 (Phase 9)
+- ✓ Paid p/L vs BEIS UK domestic heating oil market price per purchase (MarketBadge on /oil) — v1.1 (Phase 9)
 
 ### Out of Scope
 
@@ -123,4 +123,4 @@ See at a glance how much oil and electricity you're using, know when the oil wil
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-30 — Phase 8 complete (Analytics page shipped — YoY cards, projected spend, refill pattern)*
+*Last updated: 2026-05-30 — v1.1 complete (Phase 9: anomaly detection + BEIS market price comparison shipped)*

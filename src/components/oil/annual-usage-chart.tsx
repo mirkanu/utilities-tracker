@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ComposedChart, Bar, Line, Cell, XAxis, YAxis, CartesianGrid } from "recharts";
+import { Info } from "lucide-react";
 import {
   ChartContainer,
   ChartTooltip,
@@ -30,6 +31,8 @@ const chartConfig: ChartConfig = {
 };
 
 export function AnnualUsageChart({ readings, mode, temperatures, showTemp }: Props) {
+  const [showHddInfo, setShowHddInfo] = useState(false);
+
   const bars = useMemo((): AnnualBar[] => {
     if (readings.length === 0) return [];
 
@@ -98,6 +101,7 @@ export function AnnualUsageChart({ readings, mode, temperatures, showTemp }: Pro
               tickLine={false}
               axisLine={false}
               tick={{ fontSize: 11 }}
+              label={{ value: "Heating Degree Days", angle: 90, position: "insideRight", offset: 12, style: { textAnchor: "middle", fontSize: 9, fill: "var(--muted-foreground)" } }}
             />
           )}
           <ChartTooltip
@@ -132,15 +136,30 @@ export function AnnualUsageChart({ readings, mode, temperatures, showTemp }: Pro
       </ChartContainer>
 
       {showTemp && (
-        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm mt-2">
-          <div className="flex items-center gap-2">
+        <div className="space-y-1 mt-2">
+          <div className="flex items-center gap-2 text-sm">
             <span
               aria-hidden="true"
-              className="inline-block h-3 w-3 rounded-sm"
+              className="inline-block h-3 w-3 rounded-sm flex-shrink-0"
               style={{ backgroundColor: "var(--temp-color)" }}
             />
-            <span className="text-muted-foreground">HDD — Heating Degree Days</span>
+            <span className="text-muted-foreground">Heating Degree Days</span>
+            <button
+              type="button"
+              aria-label="What are Heating Degree Days?"
+              onClick={() => setShowHddInfo((v) => !v)}
+              className="text-muted-foreground hover:text-foreground active:scale-95 transition-transform"
+            >
+              <Info className="h-3.5 w-3.5" />
+            </button>
           </div>
+          {showHddInfo && (
+            <p className="text-xs text-muted-foreground leading-relaxed pl-5">
+              A measure of how cold a period was. One HDD = one day where the average
+              temperature was 1°C below the 15.5°C base. Higher values mean a colder,
+              more heating-intensive period — so HDD and oil usage tend to rise and fall together.
+            </p>
+          )}
         </div>
       )}
     </div>

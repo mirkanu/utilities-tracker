@@ -473,11 +473,34 @@ describe("detectAnomalies", () => {
   });
 
   it("flags returned most-recent-first", () => {
-    // Two obvious anomalies at different positions in the sequence
-    // 12 months of 100, then 300 (anomaly A), then 6 months of 100, then 300 (anomaly B)
-    const litres = [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 300, 100, 100, 100, 100, 100, 100, 300];
-    const readings = buildReadingsForSequence(litres, 2020, 1);
-    const flags = detectAnomalies(readings);
+    // Use precomputedMonthly directly to avoid tank-floor clamping issue.
+    // Sequence: 12×100L, then 300L (anomaly A at month 13), 6×100L, then 300L (anomaly B at month 20).
+    // Passing directly exercises the same algorithm path while bypassing buildReadingsForSequence.
+    const precomputed = [
+      { year: "2020", month: 2, litres: 100 },
+      { year: "2020", month: 3, litres: 100 },
+      { year: "2020", month: 4, litres: 100 },
+      { year: "2020", month: 5, litres: 100 },
+      { year: "2020", month: 6, litres: 100 },
+      { year: "2020", month: 7, litres: 100 },
+      { year: "2020", month: 8, litres: 100 },
+      { year: "2020", month: 9, litres: 100 },
+      { year: "2020", month: 10, litres: 100 },
+      { year: "2020", month: 11, litres: 100 },
+      { year: "2020", month: 12, litres: 100 },
+      { year: "2021", month: 1, litres: 100 },
+      { year: "2021", month: 2, litres: 300 }, // anomaly A
+      { year: "2021", month: 3, litres: 100 },
+      { year: "2021", month: 4, litres: 100 },
+      { year: "2021", month: 5, litres: 100 },
+      { year: "2021", month: 6, litres: 100 },
+      { year: "2021", month: 7, litres: 100 },
+      { year: "2021", month: 8, litres: 100 },
+      { year: "2021", month: 9, litres: 300 }, // anomaly B (most recent)
+    ];
+    // readings with >= 3 entries to pass the readings.length guard
+    const readings: R[] = [r("2020-01-01", 200), r("2021-06-01", 100), r("2022-01-01", 80)];
+    const flags = detectAnomalies(readings, precomputed);
     expect(flags.length).toBeGreaterThanOrEqual(2);
     // Most-recent-first: flag[0] should be from a later date than flag[1]
     const parseFlag = (period: string) => {

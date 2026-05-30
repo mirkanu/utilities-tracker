@@ -30,19 +30,43 @@ export type RefillPattern = {
   estimatedNextRefillDate: Date | null;
 };
 
+export type AnomalyFlag = {
+  period: string;       // "Jan 2025" — en-GB short month + numeric year
+  multiplier: number;   // rounded to 1 dp: 3.1 (above) or 0.3 (below)
+  direction: "above" | "below";
+  explanation: string;  // "3.1× above your rolling average" | "0.3× of your rolling average"
+};
+
 // Inputs use the DB row shape — numeric() columns are strings.
 type ReadingInput = { readingDate: string; heightCm: number };
 type PurchaseInput = { purchaseDate: string; litres: string; totalCostGbp: string };
+type MonthlyUsage = { year: string; month: number; litres: number };
+
+// Short month names in display order (Jan=1 … Dec=12).
+// Used instead of toLocaleDateString to guarantee consistent 3-letter names
+// across Node.js versions and locales — en-GB formats September as "Sept"
+// on some runtimes which breaks the "Jan 2025" contract.
+const SHORT_MONTHS = [
+  "", "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
+
+// Formats a (year, month) pair as "Jan 2025" — always 3-letter month name.
+function formatPeriod(year: string, month: number): string {
+  return `${SHORT_MONTHS[month]} ${year}`;
+}
 
 export function computeYearStats(
   readings: ReadingInput[],
   purchases: PurchaseInput[],
-  temperatures: DailyTemp[]
+  temperatures: DailyTemp[],
+  precomputedMonthly?: MonthlyUsage[]
 ): YearStats[] {
-  if (readings.length === 0) return [];
+  if (readings.length === 0 && !precomputedMonthly) return [];
 
   // 1. Monthly usage points (handles refill-skip, DST-safe)
-  const monthly = computeMonthlyUsage(readings);
+  // Use precomputed if supplied — avoids double-compute at the call site.
+  const monthly = precomputedMonthly ?? computeMonthlyUsage(readings);
 
   // 2. Sum monthly litres per year
   const litresByYear = new Map<string, number>();
@@ -247,4 +271,79 @@ export function computeRefillPattern(
   }
 
   return { avgIntervalDays, trend, estimatedNextRefillDate: estimate };
+}
+
+/**
+ * Detects months with anomalous oil consumption using a rolling 12-month
+ * median baseline. Returns AnomalyFlag[] sorted most-recent-first.
+ *
+ * Algorithm (RESEARCH.md Pattern 2):
+ * - Filter out months with litres===0 (refill-skip months) before building
+ *   windows — prevents false "below" flags and keeps baseline clean.
+ * - For each month i, build a window of up to 12 prior non-zero months.
+ * - Compute median of that window; skip if window < 2 or median === 0.
+ * - Flag if ratio >= 2 (above) or ratio <= 0.5 (below); exclude exact 0.
+ * - Return flags reversed (most-recent-first).
+ */
+export function detectAnomalies(
+  readings: ReadingInput[],
+  precomputedMonthly?: MonthlyUsage[]
+): AnomalyFlag[] {
+  if (readings.length < 3 && !precomputedMonthly) return [];
+
+  // Use precomputed if supplied — caller can pass computeMonthlyUsage(readings)
+  // once and share the result with computeYearStats to avoid double-compute.
+  const monthly = precomputedMonthly ?? computeMonthlyUsage(readings);
+
+  // Filter out zero-litre months (refill-skip pairs) from both baseline and
+  // flagging — prevents false "below" flags for months adjacent to a refill.
+  const nonZeroMonthly = monthly.filter((m) => m.litres > 0);
+
+  if (nonZeroMonthly.length < 3) return [];
+
+  const flags: AnomalyFlag[] = [];
+
+  for (let i = 0; i < nonZeroMonthly.length; i++) {
+    // Rolling window: up to 12 months immediately before index i
+    const windowStart = Math.max(0, i - 12);
+    const window = nonZeroMonthly.slice(windowStart, i).map((m) => m.litres);
+
+    // Need at least 2 prior months to form a meaningful baseline
+    if (window.length < 2) continue;
+
+    // Compute median (sort ascending; even-length → mean of two middle values)
+    const sorted = [...window].sort((a, b) => a - b);
+    const mid = Math.floor(sorted.length / 2);
+    const median =
+      sorted.length % 2 === 0
+        ? (sorted[mid - 1] + sorted[mid]) / 2
+        : sorted[mid];
+
+    if (median === 0) continue;
+
+    const actual = nonZeroMonthly[i].litres;
+    const ratio = actual / median;
+    const roundedMultiplier = Math.round(ratio * 10) / 10;
+    const { year, month } = nonZeroMonthly[i];
+    const period = formatPeriod(year, month);
+
+    if (ratio >= 2) {
+      flags.push({
+        period,
+        multiplier: roundedMultiplier,
+        direction: "above",
+        explanation: `${roundedMultiplier}× above your rolling average`,
+      });
+    } else if (ratio <= 0.5) {
+      flags.push({
+        period,
+        multiplier: roundedMultiplier,
+        direction: "below",
+        explanation: `${roundedMultiplier}× of your rolling average`,
+      });
+    }
+  }
+
+  // Return most-recent-first
+  return flags.reverse();
 }

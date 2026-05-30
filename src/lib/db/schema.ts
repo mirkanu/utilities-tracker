@@ -61,3 +61,12 @@ export const dailyTemperatures = pgTable("daily_temperatures", {
   hdd: numeric("hdd", { precision: 5, scale: 2 }).notNull(),
   fetchedAt: date("fetched_at").notNull(),
 });
+
+// BEIS monthly heating oil prices — Phase 9 (ANAL-06)
+// Source: DESNZ QEP Table 4.1.1 "Standard grade burning oil (Pence per litre)"
+// Granularity: monthly (no weekly heating oil data exists from BEIS/DESNZ — see 09-RESEARCH.md)
+export const beisMonthlyPrices = pgTable("beis_monthly_prices", {
+  monthStart: date("month_start").primaryKey().notNull(), // "YYYY-MM-01"
+  pplPence: numeric("ppl_pence", { precision: 6, scale: 3 }).notNull(),
+  fetchedAt: date("fetched_at").notNull(),
+});

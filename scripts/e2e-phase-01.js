@@ -6,7 +6,7 @@
 
 const { chromium } = require('/usr/lib/node_modules/playwright');
 
-const BASE_URL = 'https://utilities.gsdlabs.dev';
+const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 const PASSWORD = process.env.UTILITIES_PASSWORD;
 
 if (!PASSWORD) {

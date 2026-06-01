@@ -10,11 +10,11 @@
 
 ### Delivered
 
-Personal home utilities tracker — heating oil and electricity — from zero to production. Iron-session auth, Drizzle/PostgreSQL, Docker Compose on Hetzner VPS, Cloudflare Tunnel. Five phases: foundation, oil domain, electricity domain, unified dashboard, oil cm→litre conversion.
+Personal home utilities tracker — heating oil and electricity — from zero to production. Iron-session auth, Drizzle/PostgreSQL, Docker Compose on VPS. Five phases: foundation, oil domain, electricity domain, unified dashboard, oil cm→litre conversion.
 
 ### Key Accomplishments
 
-1. **Foundation**: Next.js 15 deployed to https://utilities.gsdlabs.dev/ — iron-session auth, Drizzle/Postgres, Docker + Cloudflare Tunnel — from blank repo in one phase
+1. **Foundation**: Next.js 15 deployed to iron-session auth, Drizzle/Postgres, Docker + Cloudflare Tunnel — from blank repo in one phase
 2. **Oil Domain**: Segment-based depletion prediction (readings since last purchase only), TankChart with refill markers, history + purchases CRUD
 3. **Electricity Domain**: All 8 ELEC requirements — meter readings, bills, usage/cost BarCharts, contract management, 3-tier expiry banner (amber/red/hidden)
 4. **Dashboard & Polish**: Unified home screen with parallel data fetch, OilStatCard + ElectricityStatCard grid, skeleton loading states, 375px mobile QA pass

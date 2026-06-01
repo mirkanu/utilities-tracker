@@ -10,11 +10,11 @@
 
 - [ ] **CHART-01**: The oil chart displays one line per calendar year (or heating season), overlaid on the same axes with each year colour-coded and a legend
 - [ ] **CHART-02**: A toggle on the oil chart switches between calendar year grouping (Jan–Dec) and heating season grouping (Oct–Sep, e.g. "2024/25")
-- [x] **CHART-03**: Historical daily average temperature for Broughshane, NI is plotted as a second line on the oil chart (secondary y-axis, °C)
+- [x] **CHART-03**: Historical daily average temperature is plotted as a second line on the oil chart (secondary y-axis, °C)
 
 ### Temperature & HDD
 
-- [x] **TEMP-01**: App fetches and caches historical daily average temperatures from Open-Meteo (lat 54.92, lon -6.22, Broughshane NI); cache refreshes at most once per day
+- [x] **TEMP-01**: App fetches and caches historical daily average temperatures from Open-Meteo (configured location); cache refreshes at most once per day
 - [ ] **TEMP-02**: Heating Degree Days (HDD) are calculated per day using base 15.5°C (UK domestic standard); summed per week/month/year/season for use in analytics
 
 ### Analytics

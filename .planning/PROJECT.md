@@ -4,8 +4,6 @@
 
 A personal, mobile-first web app for tracking home energy usage — heating oil and electricity. The owner manually logs tank readings, meter readings, purchases, and bills; the app visualises consumption over time, predicts oil depletion in cm and litres, and alerts on contract expiry.
 
-Live at: https://utilities.gsdlabs.dev/
-
 ## Core Value
 
 See at a glance how much oil and electricity you're using, know when the oil will run out, and never miss an electricity contract renewal — all from your phone.
@@ -16,7 +14,7 @@ See at a glance how much oil and electricity you're using, know when the oil wil
 
 - ✓ Password-protected login (single user) — v1.0 (Phase 1)
 - ✓ Mobile-first responsive UI with skeleton loading states — v1.0 (Phases 1+4)
-- ✓ Hosted on Hetzner VPS via Cloudflare Tunnel — v1.0 (Phase 1)
+- ✓ Hosted on VPS via reverse proxy — v1.0 (Phase 1)
 - ✓ Navigate between Oil, Electricity, and Home sections — v1.0 (Phase 1+4, 3-tab BottomNav)
 - ✓ Log oil tank height reading (cm + date) — v1.0 (Phase 2)
 - ✓ Log oil purchase (date, litres, cost, supplier) — v1.0 (Phase 2 + quick task)
@@ -39,7 +37,7 @@ See at a glance how much oil and electricity you're using, know when the oil wil
 - ✓ Toggle between calendar year (Jan–Dec) and heating season (Oct–Sep) groupings — v1.1 (Phase 6)
 - ✓ Monthly consumption view (L/month per year overlaid) — v1.1 (Phase 6)
 - ✓ Annual consumption view (L/year or L/season bar chart) — v1.1 (Phase 6)
-- ✓ Historical temperature overlay on the oil chart (Open-Meteo, Broughshane NI) — v1.1 (Phase 7)
+- ✓ Historical temperature overlay on the oil chart (Open-Meteo) — v1.1 (Phase 7)
 - ✓ Heating Degree Days (HDD, base 15.5°C) calculated per period for normalised analytics — v1.1 (Phase 7)
 - ✓ New Analytics tab (/analytics route, 4th tab in bottom nav) — v1.1 (Phase 8)
 - ✓ Year-over-year comparison cards (total L, total £, L/day, and HDD-normalised L/HDD) — v1.1 (Phase 8)
@@ -71,13 +69,13 @@ See at a glance how much oil and electricity you're using, know when the oil wil
 
 **Shipped v1.0** — 2026-05-28. 5 phases, 22 plans, ~4,050 LOC TypeScript/TSX.
 
-**Stack:** Next.js 15 (App Router, standalone output), Drizzle ORM + postgres.js, iron-session auth, Recharts via shadcn ChartContainer, shadcn/ui v4 + Tailwind v4, Docker Compose on Hetzner VPS, Cloudflare Tunnel.
+**Stack:** Next.js 15 (App Router, standalone output), Drizzle ORM + postgres.js, iron-session auth, Recharts via shadcn ChartContainer, shadcn/ui v4 + Tailwind v4, Docker Compose on VPS.
 
 **Heating oil** is measured in cm (tank height). Calibrated conversion: 10.5 L/cm — derived from refill event analysis. Constant lives in `src/lib/oil-config.ts`.
 
 **Electricity** is read manually once a month from the meter; a bill arrives monthly with cost, kWh, and billing period dates. Contract has standing charge (p/day) + unit rate.
 
-**Location**: Broughshane, Northern Ireland — relevant for future temperature correlation.
+
 
 **Mobile-first**: Primary device is phone; 375px QA verified in Phase 4.
 
@@ -86,7 +84,7 @@ See at a glance how much oil and electricity you're using, know when the oil wil
 - **Stack**: Must fit existing VPS Docker Compose setup — containerised, env vars from shared `.env.production`
 - **Auth**: Single-user password login; no need for OAuth or multi-user sessions
 - **Data entry**: All user data is manually entered; external APIs (Open-Meteo, BEIS) are read-only enrichment only
-- **Hosting**: Cloudflare Tunnel ingress required; add rule to `/home/services/hetzner-vps/config.yml`
+- **Hosting**: Deploy behind a reverse proxy
 - **Dates**: DATE columns only (never TIMESTAMP); TZ=Europe/London in Docker Compose
 
 ## Key Decisions
@@ -94,7 +92,7 @@ See at a glance how much oil and electricity you're using, know when the oil wil
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
 | DATE columns only (not TIMESTAMP) | No TZ issues for daily readings | ✓ Good — no BST problems |
-| TZ=Europe/London in Docker Compose | Northern Ireland observes BST | ✓ Good — BST handled correctly |
+| TZ=Europe/London in Docker Compose | App observes BST | ✓ Good — BST handled correctly |
 | iron-session for auth | No session table; simple encrypted cookie | ✓ Good |
 | Segment-based oil depletion | Naive all-time slope breaks on refill events | ✓ Good — refill events handled correctly |
 | Require 2+ readings before showing depletion | Avoid misleading 1-point prediction | ✓ Good |

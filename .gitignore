@@ -49,3 +49,5 @@ next-env.d.ts
 .planning/debug/
 .planning/threads/
 .planning/config.json
+.planning/research/
+.planning/milestones/

@@ -7,7 +7,7 @@
 
 ### What Was Built
 
-1. Next.js 15 app deployed to production from zero — iron-session auth, Drizzle/Postgres, Docker + Cloudflare Tunnel
+1. Next.js 15 app deployed to production from zero — iron-session auth, Drizzle/Postgres, Docker + reverse proxy
 2. Oil domain: tank height readings, purchases (with supplier), TankChart (dashed line + refill markers), segment-based depletion prediction
 3. Electricity domain: meter readings, bills (with billing period dates), usage/cost BarCharts, contract management (with standing charge), 3-tier expiry banner
 4. Unified dashboard: OilStatCard + ElectricityStatCard in grid-cols-2, ContractExpiryBanner, 3-tab bottom nav

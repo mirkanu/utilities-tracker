@@ -42,3 +42,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# .planning operational history — may contain infra-specific details
+.planning/phases/
+.planning/quick/
+.planning/debug/
+.planning/threads/
+.planning/config.json
